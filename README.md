@@ -11,7 +11,8 @@
 
 ```Python
 ❌ 
-def test_publish_post(post):
+def test_publish_post(factory):
+    post = factory.post()
     post_publisher = PostPublisher(post)
     post = post_publisher()
     assert post.is_published is True
@@ -19,7 +20,8 @@ def test_publish_post(post):
 
 ```Python
 ⭕️ 
-def test_publish_post(post):
+def test_publish_post(factory):
+    post = factory.post()
     post_publisher = PostPublisher(post)
     
     post = post_publisher()
