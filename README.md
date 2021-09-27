@@ -9,7 +9,7 @@
 
 Паттерн Arrange Act Assert означает что тес поделён на три части, разделённые пустыми строками — подготовка (пара строк), действие (одна строка) и асерты (сколько угодно). Таково самое лучшее деление. Часть с подготовкой может быть опущена если она выполняется на уровне фикстур
 
-```
+```Python
 ❌ 
 def test_publish_post(post):
     post_publisher = PostPublisher(post)
@@ -17,7 +17,7 @@ def test_publish_post(post):
     assert post.is_published is True
 ```
 
-```
+```Python
 ⭕️ 
 def test_publish_post(post):
     post_publisher = PostPublisher(post)
