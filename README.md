@@ -104,7 +104,7 @@ class PostPublisher(BaseService):
 
 ```Python
 ❌
-def test_post_by_user(post, user)
+def test_post_of_user(post, user)
     post.author = user
     post.save()
 
@@ -113,7 +113,7 @@ def test_post_by_user(post, user)
 
 ❌
 @pytest.fixture
-def post_by_user(user):
+def post_of_user(user):
     post = factory.post()
     post.author = user
     post.save()
@@ -122,7 +122,7 @@ def post_by_user(user):
 
 ⭕️
 @pytest.fixture
-def post_by_user(user):
+def post_of_user(user):
     return factory.post(author=user)
 ```
 
