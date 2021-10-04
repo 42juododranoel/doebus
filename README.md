@@ -113,7 +113,7 @@ class PostPublisher(BaseService):
 
 ```Python
 ❌
-def test_post_of_user(post, user)
+def test_post_of_user(post, user):
     post.author = user
     post.save()
 
