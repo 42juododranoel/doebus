@@ -1,33 +1,299 @@
-# Кодекс Питонус Доёбус
+# Vsevolod Skripnik’s Python, Pytest and Django guidelines
 
-Привет! Меня зовут Всеволод, и я очень люблю доёбываться до мелочей. К счастью, я работаю в компании, где мне за это ещё и платят. Чтобы продуктивнее доёбываться, я веду список всех ошибок, которые часто встречаю на ревью у новеньких в нашей компании. Ниже не закон, а мой опыт
-
-Самые новые ошибки вверху, чтоб легче было возвращаться к этому документу и читать его до того момента, пока не поймёшь что ниже уже читал. Поехали…
+This is a list of my personal, really opinionated rules, which I believe to be beneficial and important. Each and every one of them I experienced myself many times and I am 100% sure that they bring lots value if utilized correctly. This list is not final, it gets extended as I get new experiences. Many things here are the results of my work in fands.dev with @f213
 
 
-## [#16 Префиксы и постфиксы в переменных](#16)
+## Python
 
-Если переменная имеет тип datetime, то должна заканчиваться на `_at`. Если переменная имеет тип boolean, то должна начинаться на `is_`, `are_`, `was_`, `has_` и так далее. Причина в том, что если назвать переменную `deleted`, то невозможно понять: это дата удаления или флажок что оно удалено? Если переменная хранит в себе факт нужды совершить действие, например `Announcement(notify_subscribers=True)`, то переменная должна иметь префикс `do_` и называться `do_notify_subscribers`. Причина в том, что в 9 случаев из 10 со временем появляется метод `notify_subscribers` и его путают с переменной
+### Avoid using comments in your code
+
+I recommend avoiding comments in your code. I believe deeply that your code should be so simple, that the comments would become unnecessary. The problem is that no one trust comments. Whenever developer sees a comment, the first thing they always think about is whether this comment is outdated or not, because no one ever keeps them up to date, it’s the nature of things. I believe comments are acceptable when 1) you are explaining a calculated number, 2) you are explaining why you added noqa here, 3) your code is so complicated that you have to write the comment as final solution to make it at least somehow easier, 4) if your code generates some attributes and you want to make it easier to search project for them. Don’t forget that if you are writing a comment, never write it in a way that describes your code. The comment should always describe data or situation. Code is obvious, it’s not hard to understand that there is a for loop or something, it’s hard to understand why is it there and what’s inside of it.
+
+```Python
+❌ 
+# Here we have a loop to iterate over users
+for user in users:
+    user.reset_password()  # reset password
+
+```
+```Python
+⭕️ MEMORY_SIZE = 3670016  # 1024 * 1024 * 3.5
+```
+```Python
+⭕️ # noqa: SIM113 can't use enumerate here because of crazy yielding error
+```
+```Python
+⭕️ data = producer.read()  # data is [{'id': int, 'price': int, 'timestamp': int}, ...]
+```
+
+```Python
+⭕️ 
+for attribute in ['username', 'password', 'bio', 'birthday']:
+    data[f'user_{attribute}'] = None  # user_username, user_password, user_bio, user_birthday
+
+```
+    
+
+### Split your code into actions and data
+
+If you want to become a Python magician, the first thing you have to learn is to separate actions and data. By separating I mean clearly understanding when you are dealing with actions and when you are dealing with data. The following is the code which I consider to be a mess, because actions and data are mixed together:
+
+```Python
+❌ 
+if value < 10:
+    print('Small')
+elif 10 <= value < 20:
+    print('Medium')
+else:
+    print('Big')
+    
+```
+In this code we have three different entities. The first entity is a group of conditions which we use in our `if` statement. The second entity is our need to have `if` here. The third entity is our need to print the result. This example is oversimplified to be concise, but in reality I’ve seen exactly the same problem with much more complicated things. It is not always reasonable to do the following, but I want to at least show you that the code could be rewritten like that: 
+
+```Python
+⭕️ 
+
+NAME_CONDITIONS = {
+    'Small': lambda value: value < 10,
+    'Medium': lambda value: 10 <= value < 20,
+    'Big': lambda value: 20 <= value,
+}
+
+for name, condition in NAME_CONDITIONS.items():
+    if condition(value):
+        break
+
+print(output)
+
+```
+This refactoring may or may not be reasonable, but what matters is that in this piece of code 1) we see that our `if` statement is actually not a code, but data, 2) we would not have to write tons of `elif` statements if we will have tons of conditions, 3) we separate output from the action, which makes it easier to test. Generally speaking, every piece of your code ideally should always be either data or action, also there are different types of actions, such as calculation and output. This is related to abstraction layers and you have to master it.
+
+### Structure your code as layered iterations
+
+The second important thing for a Python magician is to see everything as iterations. Very often we deal with collections, such as lists, querysets and so on. Whenever we need to process one unit of collection, we always should split it into two abstraction layers: the first layer to iterate over collection, the second layer to process a single item. Processing a single item may at the same time be a place to iterate over another collection. This way the code becomes more isolated, less fragile, has better readability and is easier to test.
+
+```Python
+❌ 
+class WordCatFinder:
+    def __init__(self):
+        self.articles = [
+            {'id': 1, 'text': 'The cat is eating.'},
+            {'id': 2, 'text': 'Looks like the cat is sleeping.'},
+            {'id': 3, 'text': 'Dead is the cat.'},
+        ]
+    
+    def run(self):
+        records = []
+        for article in self.articles:
+
+            words = article['text'].split()            
+            for i, word in enumerate(words):
+                if word == 'cat':
+                    break
+            else:
+                i = -1
+            
+            record = {
+                'article_id': article['id'], 
+                'word_position': i + 1,
+            }
+            records.append(record)
+        return records
+                    
+```
+
+```Python
+⭕️ 
+class WordCatFinder:
+    def __init__(self):
+        self.articles = [
+            {'id': 1, 'text': 'The cat is eating.'},
+            {'id': 2, 'text': 'Looks like the dog is sleeping.'},
+            {'id': 3, 'text': 'Dead is the cat.'},
+        ]
+
+    def run(self):
+        return self.get_records()
+
+    def get_records(self):
+        return [
+            self.get_article_record(article)
+            for article in self.articles
+        ]
+
+    def get_article_record(self, article):
+        article_id = article['id']
+        word_position = self.get_word_position(article['text'])
+        return {
+            'article_id': article['id'],
+            'word_position': word_position + 1,
+        }
+
+    def get_word_position(self, text):
+        words = text.split()
+        for i, word in enumerate(words):
+            if word == 'cat':
+                return i
+        else:
+            return -1
+
+```
+
+### Use variable prefixes and postfixes
+
+
+If a variable has a datetime type, it should end in `_at`. If a variable has a boolean type, it should start with `is_`, `are_`, `was_`, `has_` and so on. The reason is: if we call our variable `deleted`, it will be impossible to understand whether it is a date of deletion or a flag that it was deleted. If a variable is used to store the fact that we have to do some action, such as `Announcement(notify_subscribers=True)`, then it should have a `do_` prefix and be called something like `do_notify_subscribers`. In 9 out of 10 cases there simultaneously exist both method `notify_subscribers` and the variable which indicates that we have to do it. It’s easy to mix it up.
 
 ```
 ❌ updated, updated, update 
 ⭕️ updated_at, is_updated, do_update 
 ```
 
+### On using for, to, in and from in variable names
 
-## [#15 Слова for и to в названиях переменных](#15)
-
-«Юзеры на удаление» переводится не как users_for_delete, а как users_to_delete. Если последнее слово глагол, то используем to, если существительное, то for
-
+If you have some users which you need to delete, you don’t call them `users_for_delete`, you call them `users_to_delete`. It may be obvious for native speakers, but for Russian-speaking developers it’s a common mistake. Also avoid using `from` and `in` if you can reverse the sentence without them.
 ```
 ❌ posts_for_add, users_to_deletion
 ⭕️ posts_to_add, users_for_deletion
 ```
+```
+❌ posts_in_feed
+⭕️ feed_posts
+```
+
+```
+❌ user_from_popularity_widget
+⭕️ popularity_widget_user
+```
+
+### Avoid low-quality variable names
+
+Avoid calling your variables `got`, `result`, `x`, `i`, `j` and so on. There are two reasons for that. First: it’s simply unclear what’s inside such variable. Second: it tempts to not understand your own code. When developer writes code, it’s their duty to know exactly what’s inside each variable. It always starts with little things. Today you call your variable `foobar`, in a week you will have bugs on productions, I have seen it many times. Also I recommend to avoid including types in variable names, because they often change, but people don’t always change the name, so the name stays and brings confusion. One more rule to follow: if your class is `PostCreator`, you should call the instance `post_creator`, don’t call it simply `creator` or anything else, try make your code as predictable as possible.
+
+```
+❌ got = membership_creator()
+⭕️ membership = membership_creator()
+```
+
+```
+❌ user_id_list
+⭕️ user_ids
+```
+
+```
+❌ creator = PostCreator()
+⭕️ post_creator = PostCreator()
+```
 
 
-## [#14 Структура теста должна соответствовать AAA](#14)
+### Multiple lines separated by backslash is a good thing
 
-Паттерн Arrange Act Assert означает что тест поделён на три части, разделённые пустыми строками — подготовка (пара строк), действие (одна строка) и асерты (сколько угодно). Таково самое лучшее деление. Часть с подготовкой может быть опущена если она выполняется на уровне фикстур. Действия типа refresh_from_db являются частью асерта
+Make as little calls per line as possible, because it will reduce the cognitive complexity of your code and make it easier to read. People generally read from left to right, they lose focus from left to right. Try to keep the most important parts on left side, also utilize line breaks to avoid long lines.
+```
+❌ Post.objects.published().filter(published__gte=recently_period).values_list('id', flat=True)
+⭕️ Post.objects \
+    .published() \
+    .filter(published__gte=recently_period) \
+    .values_list('id', flat=True)
+
+```
+
+### Avoid magic numbers
+
+Magic numbers are numbers which have unclear meaning. Consider example below. Seven what? Days, minutes, hours? Really confusing.
+
+```
+❌ Post.objects.published_recently(7)
+⭕️ Post.objects.published_recently(days=7)
+```
+
+
+### Avoid Noun Adjunct violations
+
+[Noun adjunct:](https://en.wikipedia.org/wiki/Noun_adjunct) means that if we use noun before another noun, it usually has to be singular. For example if we have `cats` list and `names` list, and then we combine them, the result should be called `cat_names`, not `cats_names`. It’s the same thing as backend developers instead of backends delelopers. There are exceptions like sports companies, but in most cases the first noun should be singular.
+
+```
+❌ views_count
+⭕️ view_count
+```
+
+```
+❌ users_posts
+⭕️ user_posts
+```
+
+
+
+## Pytest
+
+### Tests should always be simpler than the code they test
+
+Whenever you write tests, always keep in mind that they have to be simpler than the code you are testing them with. If your test fails one day, the more complexity it has, the stronger will be your temptation to monkey-fix, skip or even remove it. This temptation is twice stronger if the test was written by someone else. It is your job as software engineer to keep all things as simple as possible, and tests especially.
+
+```Python
+❌ 
+def test_send_mail():
+    file = open('../../../../conf/config.json', 'r')
+    config_string = file.read()
+    file.close()
+    config_dict = json.loads(config_string)
+    username = config['username'] or os.getenv('MAIL_USERNAME')
+    password = config['password'] or os.getenv('MAIL_PASSWORD')
+    mailer = Mailer(username=username, password=password)
+    mailer.configure(environment='testing')
+    mailer.use_backend('stub')
+    mail = mailer.get_mail(text='test mail text', emails=['test@foo.bar'])
+    mail.send()
+    assert mail.is_sent is True
+
+```
+
+```Python
+⭕️ 
+def test_send_mail(mail):
+    mail.send()
+    
+    assert mail.is_sent is True
+    
+```
+
+
+### Avoid class-based tests
+
+When you start learning Python, you start with functions and only later learn about classes, the reason for that is classes being harder to understand. That’s exactly why you should also avoid them in tests: simplicity is everything in testing, "classy" tests bring temptation to make things more complicated — but in testing you don't need it. It is true that class-based tests have a scent of "structure", but they also have a scent of pain in the ass when you try to reuse `setUp` and `setUpClass` methods across different test-cases or try to remember what is already in self and what is not. In my career I have not yet seen a test of such complexity that it could not be clearly structured using fixtures and parametrizing. The simpler the test structure, the faster and easier it is to maintain it. By putting the necessary stuff into fixtures instead of `setUp` calls, you make it easier to access it. This allows to have great solutions, such as Single Source of Truth Fixtures, for example having only one instance of `Mail()` in most tests instead of repeating the same initializing call ten thousand times and fixing it ten thousand times later in different `setUp` calls when the class interfaces changes.
+
+```Python
+❌ 
+
+class MailTestCase(unittest.TestCase):
+    def setUp(self):
+        self.mail = Mail(text='123', emails=['test@foo.bar']) 
+    
+    def test_send_mail(self):
+        is_sent = self.mail.send()
+        
+        assert is_sent
+
+```
+
+```Python
+⭕️ 
+
+@pytest.fixture
+def mail():
+    return Mail(text='123', emails=['test@foo.bar'])
+
+
+def test_send_mail(mail):
+    mail.send()
+    
+    assert mail.is_sent is True
+
+```
+
+### Follow the AAA pattern
+
+AAA pattern (Arrange, Act, Assert) states that each test should be divided into three blocks separated by blank lines: the arrange block (1-5 lines), the action block (always single line) and the assert block (any number of lines). This helps the viewer to clearly understand which lines are used as prep work and which line is being tested. The less lines arrange block has — the better. Arrange block also may be omitted if needed. Also in assert block you can put some lines which may not be asserts, but they prepare the data for being asserted, such as Django’s `refresh_from_db` calls.
 
 ```Python
 ❌ 
@@ -36,6 +302,7 @@ def test_publish_post(factory):
     post_publisher = PostPublisher(post)
     post = post_publisher()
     assert post.is_published is True
+    
 ```
 
 ```Python
@@ -47,6 +314,7 @@ def test_publish_post(factory):
     post = post_publisher()
     
     assert post.is_published is True
+    
 ```
 
 
@@ -56,6 +324,7 @@ def test_send_mail(mail):
     mail.send()
     
     assert mail.is_sent is True
+    
 ```
 
 ```Python
@@ -65,12 +334,225 @@ def test_unpublish_post(post):
     
     post.refresh_from_db()
     assert post.is_published is False
+    
+```
+
+### Use symbolic asserts instead of functional asserts
+
+I recommend using `assert` statements instead of classic `self.assertTrue` calls. When we see a word, we read it, and then we understand it, it takes some time, especially if we are tired. But when we see a group of symbols, such as `==` or `!=`, we understand them at a glance, because we see them so often in code. Another reason is that most syntax highlighting themes have a solid color for `assert` keyword, while something like `self.assertTrue` may not be even highlighted at all, or only `self` would be highlighted, even though it has the least value of the entire statement.
+
+```Python
+❌ 
+self.assertTrue(mail.is_sent)
+self.assertEqual(mailer.mail_count, 1)
+
+```
+
+```Python
+⭕️ 
+assert mail.is_sent
+assert mailer.mail_count == 1
+
+```
+
+### Follow test naming template
+
+When you write a test’s name, it’s usually the best if you follow this template: first you start with standard prefix `test_`, then you add snake-cased class name, then method name, then some feature or expectation, then `_if` followed by brief scenario description. Some parts may be omitted if we are testing the default good scenario. This template makes it easy to search for all tests where some exact class or method are being tested. Also if such test fails one day, you will clearly understand what are the expectations or use-case here. Remember to keep names the same way they are in code, for example do not put `not` between `is_` and some property if you are testing if something is false, also do not use `s` on the end of the verb, because it makes it harder to search project. If you are testing a scenario, then add a postfix starting with `_if`. Also note that if you feel like using `and` in your test name, probably you need two test or some data grouping. This template may not work in all cases and sometimes should be altered, but usually it works like a charm.
+
+```Python
+❌ test_is_sent
+⭕️ test_mail_is_sent
+
+```
+
+```Python
+❌ test_is_not_sent
+⭕️ test_mail_is_sent_false
+
+```
+
+```Python
+❌ test_bad_emails
+⭕️ test_mailer_get_mail_if_bad_emails
+
+```
+
+```
+❌ test_first_name_and_last_name
+⭕️ test_first_name, test_last_name
+⭕️ test_name_fields
+```
+
+### Treat your tests like you treat your code
+
+Your tests should not be considered some kind of lab environment. The more you mock, the more you use prefixes likes `expected_` when asserting, the more you use general words like `result` without specifying what exactly is the result — the further your tests stand from your code, the further they stand from real life and the less value they have. This is not what you want. Your tests should be a source of truth on how to use your code in real world scenario. Whenever possible, avoid using such things as mocking, test data or unclear variables, asserts and statements. Your tests should be written in such a way that would leave no doubt that you had the full understanding of what you were testing and that you were testing the real life code and not some kind of imaginary make-believe testing mocked code. 
+
+```Python
+❌ 
+def test_mail_is_sent(mocked_mail, expected_result):
+    returned_result = mocked_mail.send()
+    
+    assert returned_result == expected_result
+
+```
+
+```Python
+⭕️ 
+def test_mail_is_sent(mail):
+    is_sent = mocked_mail.send()
+    
+    assert is_sent is True
+
+```
+
+### Use fixture layering and chaining
+
+If you have to create a bunch of fixtures that share some common things, try to layer the fixtures or chain them in such a way that would reduce the amount of repeating code. 
+
+```Python
+❌ 
+
+@pytest.fixture
+def user_alice():
+    user = User(username='alice')
+    user.save()
+    return user
+
+
+@pytest.fixture
+def user_bob():
+    user = User(username='bob')
+    user.save()
+    return user
+
+
+@pytest.fixture
+def users():
+    user_alice = User(username='alice')
+    user_bob = User(username='bob')
+    return [user_alice, user_bob]
+
+```
+
+```Python
+⭕️ 
+
+@pytest.fixture
+def create_user():
+    def _create_user(username):
+        user = User(username=username)
+        user.save()
+        return user
+    return _create_user
+
+
+@pytest.fixture
+def user_alice(create_user):
+    return create_user('alice')
+
+
+@pytest.fixture
+def user_bob(create_user):
+    return create_user('bob')
+
+
+@pytest.fixture
+def users(user_alice, user_bob):
+    return [user_alice, user_bob]
+
+```
+
+### Do not modify fixtures on the fly (including Django instances)
+
+We often need to diverge from a common fixture version of model or some other data to add some custom flavor to it. In order to do so, you may feel temptation to simply set the corresponding attribute in arrange block. This makes your code fragile, because Django models are designed in a such way that if you set an attribute which is not a field, there will be no error. For example, if the model has an `author` field, but I type it as `post.athor = user`, the code won’t break, but this may cause some crazy invisible bugs. And there is more to that. By simply setting attributes on the fly we think of fixture as of piece of data and not as of domain logic entity. If creating a Post instance also causes some author field processing via `PostCreator` service, it simply won't happen if you set the attribute manually. As the result, the tests are testing artificial functionality ignoring some crucial business domain logic. In any fixture no kind of data (including Django model instance) should be in any way modified from the moment of entering the test until the moment of action line. Test data should always reach action line in the same form that it was when the test started.
+
+
+```Python
+❌
+def test_post_of_user(post, user):
+    post.author = user
+    post.save()
+
+    assert user.authored_posts.first() == post
+
+```
+```Python
+❌
+@pytest.fixture
+def post_of_user(user):
+    post = factory.post()
+    post.author = user
+    post.save()
+    return post
+
+```
+```Python
+
+⭕️
+@pytest.fixture
+def post_of_user(user):
+    return factory.post(author=user)
+
 ```
 
 
-## [#13 Бизнес-логика должна быть в сервисах](#13)
+### Use pytest parametrizing
 
-Исторически бизнес-логика хранилась в моделях, но опыт показывает что лучше её хранить в сервисах, потому что сервисы легче тестировать и поддерживать. Сервис — это небольшой класс, который наследуется от BaseService и выполняет какой-то кусочек бизнес-логики. Типичные сервисы — PostCreator, UserImporter, MembershipUpdater и так далее. Самое главное место в сервисе — метод act, перекрываем его и пишем туда код сервиса. Если нужна валидация, то расширяем метод validate. В 95% случаев сервис должен возвращать какой-то объект или объекты и обычно это тот объект или объекты, над которыми выполняется действие. Много маленьких сервисов — это хорошо
+Parametrizing is a mechanism of running your test multiple times, each time providing it with different input values. This allows you to easily increase amount of tests in your project, while typing less. Also it helps to better identify which input data caused the test to fail. 
+
+```Python
+❌ 
+def test_post_strip_text():
+    for text, stripped_text in [['42   ', '42'], [' 42 ', '42'], ['   42', '42']]:
+        post = Post(text=text)
+
+        assert post.text == stripped_text    
+
+```
+
+```Python
+⭕️ 
+@pytest.mark.parametrize(
+    ('text', 'stripped_text'),
+    [
+        ('42  ', '42'),
+        (' 42 ', '42'),
+        ('  42', '42'),        
+    ],
+)
+def test_post_strip_text(text, stripped_text):
+    post = Post(text=text)
+    
+    assert post.text == stripped_text    
+
+```
+
+### Use time-mocking packages
+
+A common scenario: you created an object and you have to test if the `created_at` is correct, but whenever you run this test, the `timezone.now()` gets a different value. What shall you do? Avoid it? Mock it? As with pretty much anything in development, people have already addressed it. In this case the answer is to use time-mocking packages, such are `freezegun` and `time_machine`. There may be more, but the idea is same: they allow you to manipulate the system time in tests, switch it using `with` statements or travel timedeltas to emulate time passing.  
+
+```Python
+⭕️ 
+@pytest.mark.freeze_time('2001-01-01')
+def test_post_published_at():
+    post = Post()
+
+    post.publish()
+    
+    assert post.published_at == '2001-01-01T00:00:00Z'    
+
+```
+
+### Learn pytest.ini and command-line options
+
+Pytest has a configuration file called `pytest.ini` which you can use to filter warnings, alter test discovery, skip some tests, configure environment variables and tweak some other behavior, such pytest modules. I recommend diving into its documentation to understand what is at least theoretically possible to achieve by simple means. My favorites are for example `-x` and `--lf` command-line options, which respectively mean to exit on first failed test and only run the tests which failed during the previous run. 
+
+
+## Django
+
+### You business domain logic should be in services
+
+Historically people used models to store business domain logic, but in my experience it’s better to store it in services, because they are easier to test and maintain. Service is a small class which inherits from BaseService and does some piece of business logic. Typical services include `PostCreator`, `UserImporter`, `MembershipUpdater` and so on. The most important part of service is `act` method, it should be overriden and store service code inside of it. If validation is needed, override `validate` method. Remember that in 95% of cases the service needs to return some kind of object or objects, usually the ones which were processed by it. More services is better, smaller services are better.
 
 ```Python
 ❌
@@ -93,181 +575,46 @@ class PostPublisher(BaseService):
         self.post.is_published = True
         self.post.published_at = now()
         self.post.save()
-```
-
-
-## [#12 Слово when в тестах](#12)
-
-Часто надо написать в тестах следующее: test_something_when_something. В этих сценариях лучше писать не when, а if, потому что if короче и естественнее для программиста, мы часто видим ветвление if и для нас когнитивная нагрузка от этого слова куда ниже чем от слова when
+        return self.post
 
 ```
-❌ test_membership_when_anon
-⭕️ test_membership_if_anon
-```
 
+### Avoid filtering querysets outside of home app
 
-## [#11 Переменные got и result](#11)
-
-Нельзя называть переменные именами got, result, x и так далее. Причины две. Первая: банально непонятно что внутри, это создаёт лишнюю когнитивную нагрузку на читающего. Вторая: это соблазняет не понимать собственный код. Когда разраб пишет код, он должен железно понимать его, он должен знать что внутри каждой переменной. Названия got или result соблазняют забивать на то, что внутри, а это ведёт к проблемам. Исключения у правила есть, к примеру в тестах АПИ ответ всегда называется got, потому что печатать response слишком долго, а кроме него ничего в АПИ никогда не бывает. Но если в got или result может попасть всё что угодно, то их писать нельзя, надо писать чётко что попадёт внутрь 
-
-```
-❌ got = membership_creator()
-⭕️ membership = membership_creator()
-```
-
-## [#10 Впатчивание полей моделей на лету](#10)
-
-В тестах часто бывает нужно немного отклониться от стандартной фикстурной версии модели, в результате появляется соблазн просто взять и впатчить туда нужное. От этого код становится хрупким, потому что джанговские модели устроены таким образом, что если ты впатчишь им атрибут, который на самом деле не является полем, то ошибки не случится. Если у модели есть поле author, а я опечатаюсь и в фикстуре сделаю post.athor = user, то ошибки не случится, это может породить неуловимые проблемы. Но что ещё хуже: впатчивая некий кусок данных в инстанс модели, мы тем самым относимся к модели исключительно как к данным, а не как к сущности бизнес-логики. Если при создании инстанса Post в случае указания поля author должен выполниться некий сторонний сервис, то при post.author = user он не выполнится. В результате тесты начнут тестировать искусственную функциональность, которая пропускает часть бизнес-логики. В фикстурах инстанс модели никогда не должен меняться с момента создания до момента экшена, он всегда должен доходить до экшена ровно таким, каким он был создан
-
+If according to business domain logic a post is considered public if it is published, approved by moderators and so on, all these conditions should be stored in a single well-known place, usually it’s a manager method in home app. It is a bad practice to disperse this logic across other apps, because this will force us to keep all the places in mind and don't forget to fix them too whenever we have to add a new condition. 
 
 ```Python
-❌
-def test_post_of_user(post, user):
-    post.author = user
-    post.save()
+❌ Dispersing across apps:
 
-    assert user.authored_posts.first() == post
-
-
-❌
-@pytest.fixture
-def post_of_user(user):
-    post = factory.post()
-    post.author = user
-    post.save()
-    return post
-
-
-⭕️
-@pytest.fixture
-def post_of_user(user):
-    return factory.post(author=user)
-```
-
-
-## [#9 Вызов фильтраций инстанса за пределами домашней апы](#9)
-
-Если бизнес-логика подразумевает, что публичный пост — это пост опубликованный, политкорректный и так далее, то вся эта логика должна проверяться в одном хорошо известном месте, обычно это метод менеджера. Нельзя распылять эту логику по другим приложениям, потому что тогда мы обязываем себя не забыть про все такие места, когда в понятие «публичного поста» добавится ещё какое-нибудь условие
-
-```Python
-❌ Распылять по приложениям:
-
-# В кверисете для вывода постов на главной в апе posts
+# List all posts on main page queryset
 public_posts = Post.objects.filter(is_published=True, is_restricted=False)
 
-# В кверисете для вывода постов этого автора в апе users
+# User posts queryset in users app
 authored_posts = Post.objects.filter(is_published=True, is_restricted=False, author=user)
 
-# В кверисете для вывода постов в апе sitemaps:
+# Sitemap posts queryset in sitemaps app
 sitemap_posts = Post.objects.filter(is_published=True, is_restricted=False, published_at__gt=week_ago)
+
 ```
 
 ```Python
-⭕️ Хранить централизованно:
+⭕️ Centralized storing:
 
-# Кверисет-менеджер модели Post
+# Post model manager queryset
 class PostQuerySet(DefaultQuerySet):
     def public(self):
         return self.filter(is_published=True, is_restricted=False)
 
 
-# В кверисете для вывода постов на главной в апе posts
+# List all posts on main page queryset
 public_posts = Post.objects.public()
 
-# В кверисете для вывода постов этого автора в апе users
+# User posts queryset in users app
 authored_posts = Post.objects.public().filter(author=user)
 
-# В кверисете для вывода в сайтмапы:
+# Sitemap posts queryset in sitemaps app
 sitemap_posts = Post.objects.public().filter(published_at__gt=week_ago)
-```
-
-## [#8 Опускание части переменной](#8)
-
-Если сервис называется PostCreator, то когда мы инстанцируем его, мы должны назвать его post_creator, а не просто creator. Во-первых, без этого поиск post_creator по проекту пропустит это место. Во-вторых, когда человек читает код, увидев creator ему придётся гадать о том, что это за криэйтор: user_creator, post_creator, tag_creator и так далее. Не надо создавать людям лишнюю когнитивную нагрузку
 
 ```
-❌ creator = PostCreator()
-⭕️ post_creator = PostCreator()
-```
 
 
-## [#7 Глагол третьего лица в тестах](#7)
-
-Если в названии теста используется глагол в третьем лице, то не надо ставить s на конце. Это нужно, чтобы по коду было легче найти все вхождения действия из разряда create_post. Если в поиске вбить только create_, то это выдаст кучу лишнего типа create_user, create_tag и так далее, а если вбить create_post, то поиск не найдёт тесты с названиями типа creates_post. Поэтому s не нужна
-
-```
-❌ test_user_creates_post
-⭕️ test_user_create_post
-```
-
-## [#6 Типы в названиях переменных](#6)
-
-В названии переменных не нужно указывать типы, потому что это накладывает необходимость не забыть поменять название переменной, если внутри поменяется тип данных, а это происходит повсеместно, чаще всего list превращается в dict. Другая причина — часто туда может попасть None
-
-```
-❌ user_id_list
-⭕️ user_ids
-```
-
-
-## [#5 Несколько действий на строке](#5)
-
-На одной строке должен быть минимум действий, иначе увеличивается когнитивная нагрузка на читающего и появляются ошибки от невнимательности к концу строки. Люди читают слева направо и фокус внимания падает по мере движения взгляда вправо
-
-```
-❌ Post.objects.published().filter(published__gte=recently_period).values_list('id', flat=True)
-⭕️ Post.objects \
-    .published() \
-    .filter(published__gte=recently_period) \
-    .values_list('id', flat=True)
-```
-
-
-## [#4 Магические числа](#4)
-
-Магические числа — это числа, которые означают непонятно что. Ниже пример, где невозможно понять: семь чего? Дней, минут, часов?
-
-```
-❌ Post.objects.published_recently(7)
-⭕️ Post.objects.published_recently(days=7)
-```
-
-
-## [#3 Нарушение noun adjunct](#3)
-
-[Noun adjunct:](https://en.wikipedia.org/wiki/Noun_adjunct) если мы используем существительное в роли своего рода определения для другого существительного, то оно должно стоять в единственном числе. Если у нас есть массив cats и массив names, а потом мы их склеиваем, то результат должен называться cat_names, а не cats_names. Мы же например говорим backend developers, а не backends delelopers. Есть исключения типа sports companies, но в 99% случаев речь не об исключениях
-
-```
-❌ views_count
-⭕️ view_count
-```
-
-```
-❌ users_posts
-⭕️ user_posts
-```
-
-
-## [#2 Слова in и from в названии переменной](#2)
-
-Если в переменной есть in или from, то это намёк на то, что её нужно развернуть задом-наперёд. В английском почти что угодно может выполнять роль определния, поэтому более естественно писать часть после in в начале, а само in выкидывать
-
-```
-❌ posts_in_feed
-⭕️ feed_posts
-```
-
-```
-❌ user_from_popularity_widget
-⭕️ popularity_widget_user
-```
-
-## [#1 Слово and в названии теста](#1)
-
-Если в названии теста есть слово and, то он скорее всего тестирует больше чем одну единицу кода, его надо или разделить на два теста или слепить две единицы кода в единицу более высокого уровня
-
-```
-❌ test_first_name_and_last_name
-⭕️ test_first_name, test_last_name
-⭕️ test_name_fields
-```
