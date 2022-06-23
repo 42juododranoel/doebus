@@ -1,6 +1,37 @@
-# Vsevolod Skripnik’s Python, Pytest and Django guidelines
+# Vsevolod Skripnik’s Developer Experience guidelines
 
-This is a list of my personal, really opinionated rules, which I believe to be beneficial and important. Each and every one of them I experienced myself many times and I am 100% sure that they bring lots value if utilized correctly. This list is not final, it gets extended as I get new experiences. Many things here are the results of my work in fands.dev with @f213
+This is a list of my personal, really opinionated rules, which I believe to be beneficial and important. Each and every one of them I experienced myself many times and I am 100% sure that they bring lots value if utilized correctly. This list is not final, it gets extended as I get new experiences. Many things here are the results of my work in fands.dev with @f213.
+
+
+## Developer Experience
+
+
+### Follow Test Driven Development
+
+I don’t remember who said it, but code without tests is legacy by design. There are tons of pros to writing tests: 1) easier to hire high-quality developers, 2) no recurring bugs, 3) accurate estimation of time requirements for tasks, 4) saving time and money on manual testing, 5) higher developer morale, 6) being able to perform architecture adjustments which would be unfeasible without tests, 7) new developers learn project faster, 8) bigger trust between developers, 9) less stress for developers. Avoiding using tests in modern development is the same as avoiding using cars in logistics, instead relying on ye olde horses. There exists a popular misconception that writing and maintaining tests takes longer time than working without them, but this is based on a wrong assumption that it takes the same amount of time to implement the code with and without tests. In reality writing tests speeds up coding by making it easier to run this code under different conditions in a friendly environment. There doesn’t exist a single reason to not write tests .
+
+### Use linters
+
+Linters are automated tools which highlight potential problems in your code. The more linters — the better. Linters should be run on each build before tests. It is recommended to configure your IDE to undo its custom linting and follow the project linting rules. A PR can’t be merged if it has any linting errors.
+
+### Task code review practice
+
+Each PR should be reviewed by one teammate of same or higher seniority level. This rule is not required for seniors and tech lead, but is mandatory for middle, junior and intern developers.
+
+### Task product review practice
+
+Each task should be validated by someone from product team, who either created the task, or is responsible for the task’s domain. Each frontend task should also be reviewed by a designer.
+
+### You don’t need coverage metrics
+
+In my experience, coverage metrics are make-believe, having a 100% code coverage doesn’t equate to having 100% product use cases coverage. Some code can’t or doesn’t even need to be covered at all, having a coverage level requirement often forces developers into thinking less about the quality of their work and more about tricking the coverage system into thinking that the work has high enough quality.
+
+
+## Architecture
+
+### Homogeneity is not mandatory
+
+It is generally good if your code is unified and homogenous, but this doesn’t have to always be required. Some parts of system are used more often than others, and it’s OK to have less important parts to be less polished than the core parts. It’s also generally optional and not required to refactor X part of the system, which is similar to the Y part you are refactoring now, but in this case you have to let your teammates know about your refactoring, so that they would be able to do the same thing when they will work with X part.
 
 
 ## Python
