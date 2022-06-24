@@ -8,7 +8,7 @@ This is a list of my personal, really opinionated rules, which I believe to be b
 
 ### Ownership, responsibility and home feeling
 
-It is crucial for developers to feel some degree of ownership and responsibility for their repository. Backend team should have their backend repository only for themselves, same with frontend and infrastructure teams. It is discouraged to mix infrastructure, scripts and backend together in one repository, it is even more discouraged to also add frontend to the mix. Developers should feel at home in their repository, because otherwise the dormitory effect kicks in: if this repository is everybody’s, then it is nobody’s, and nobody is responsible for it. People generally like to care about quality and keep things clean and tidy, but they only do it if they feel connection to the place.
+It is crucial for developers to feel some degree of ownership and responsibility for their repository. Backend team should have their backend repository only for themselves, same with frontend and infrastructure teams. It is discouraged to mix infrastructure, scripts and backend together in one repository, it is even more discouraged to also add frontend to the mix. Developers should feel at home in their repository, because otherwise the dormitory effect kicks in: if this repository belongs to everybody, then it belongs to nobody, and nobody is responsible for housekeeping in it. People generally like to care about quality and keep things clean and tidy, but they only do that if they feel connection to the place.
 
 ### Follow Test Driven Development
 
