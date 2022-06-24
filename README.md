@@ -6,9 +6,13 @@ This is a list of my personal, really opinionated rules, which I believe to be b
 ## Developer Experience
 
 
+### Ownership, responsibility and home feeling
+
+It is crucial for developers to feel some degree of ownership and responsibility for their repository. Backend team should have their backend repository only for themselves, same with frontend and infrastructure teams. It is discouraged to mix infrastructure, scripts and backend together in one repository, it is even more discouraged to also add frontend to the mix. Developers should feel at home in their repository, because otherwise the dormitory effect kicks in: if this repository is everybody’s, then it is nobody’s, and nobody is responsible for it. People generally like to care about quality and keep things clean and tidy, but they only do it if they feel connection to the place.
+
 ### Follow Test Driven Development
 
-I don’t remember who said it, but code without tests is legacy by design. There are tons of pros to writing tests: 1) easier to hire high-quality developers, 2) no recurring bugs, 3) accurate estimation of time requirements for tasks, 4) saving time and money on manual testing, 5) higher developer morale, 6) being able to perform architecture adjustments which would be unfeasible without tests, 7) new developers learn project faster, 8) bigger trust between developers, 9) less stress for developers. Avoiding using tests in modern development is the same as avoiding using cars in logistics, instead relying on ye olde horses. There exists a popular misconception that writing and maintaining tests takes longer time than working without them, but this is based on a wrong assumption that it takes the same amount of time to implement the code with and without tests. In reality writing tests speeds up coding by making it easier to run this code under different conditions in a friendly environment. There doesn’t exist a single reason to not write tests .
+I don’t remember who said it, but code without tests is legacy by design. There are tons of pros to writing tests: 1) easier to hire high-quality developers, 2) no recurring bugs, 3) accurate estimation of time requirements for tasks, 4) saving time and money on manual testing, 5) higher developer morale, 6) being able to perform architecture adjustments which would be unfeasible without tests, 7) new developers learn project faster, 8) bigger trust between developers, 9) less stress for developers when sotware malfunctions. Avoiding using tests in modern development is the same as avoiding using cars in logistics, instead relying on ye olde horses. There exists a popular misconception that writing and maintaining tests takes longer time than working without them, but this is based on a wrong assumption that it takes the same amount of time to implement the code with and without tests. In reality writing tests speeds up coding by making it easier to run this code under different conditions in a friendly environment. There doesn’t exist a single reason to not write tests .
 
 ### Use linters
 
@@ -16,11 +20,11 @@ Linters are automated tools which highlight potential problems in your code. The
 
 ### Task code review practice
 
-Each PR should be reviewed by one teammate of same or higher seniority level. This rule is not required for seniors and tech lead, but is mandatory for middle, junior and intern developers.
+Each PR should be reviewed by one teammate of same or higher seniority level. This rule is not required for seniors and tech lead, but is mandatory for middle, junior and intern developers. There are multiple benefits of code review: 1) having one more pair of eyes looking at the solution helps to bring quality to it, 2) developers learn from each other, which makes them more productive and bring more value for project, 3) sometimes it helps to avoid bugs and errors since all humans sometimes make mistakes.
 
 ### Task product review practice
 
-Each task should be validated by someone from product team, who either created the task, or is responsible for the task’s domain. Each frontend task should also be reviewed by a designer.
+Each task should be validated by someone from product team, who either created the task, or is responsible for the task’s domain. Each frontend task should also be reviewed by a designer. The goal of product review is to make sure that developer’s solution is considered good and solving original problem or bringing necessary value to the product. The goal of design review is to make sure that UI and UX are solid and high-quality.
 
 ### You don’t need coverage metrics
 
