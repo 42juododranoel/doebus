@@ -20,7 +20,7 @@ Linters are automated tools which highlight potential problems in your code. The
 
 ### Task code review practice
 
-Each PR should be reviewed by one teammate of same or higher seniority level. This rule is not required for seniors and tech lead, but is mandatory for middle, junior and intern developers. There are multiple benefits of code review: 1) having one more pair of eyes looking at the solution helps to bring quality to it, 2) developers learn from each other, which makes them more productive and bring more value for project, 3) sometimes it helps to avoid bugs and errors since all humans sometimes make mistakes.
+Each PR should be reviewed by one teammate of same or higher seniority level. This rule is not required for seniors and tech lead, but is mandatory for middle, junior and intern developers. There are multiple benefits of code review: 1) having one more pair of eyes looking at the solution helps to bring quality to it, 2) developers learn from each other, which makes them more productive and create more value for the project in the long run, 3) it helps to avoid bugs and errors since all humans sometimes make mistakes.
 
 ### Task product review practice
 
