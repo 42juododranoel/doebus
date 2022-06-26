@@ -12,7 +12,7 @@ It is crucial for developers to feel some degree of ownership and responsibility
 
 ### Follow Test Driven Development
 
-I don’t remember who said it, but code without tests is legacy by design. There are tons of pros to writing tests: 1) easier to hire high-quality developers, 2) no recurring bugs, 3) accurate estimation of time requirements for tasks, 4) saving time and money on manual testing, 5) higher developer morale, 6) being able to perform architecture adjustments which would be unfeasible without tests, 7) new developers learn project faster, 8) bigger trust between developers, 9) less stress for developers when sotware malfunctions. Avoiding using tests in modern development is the same as avoiding using cars in logistics, instead relying on ye olde horses. There exists a popular misconception that writing and maintaining tests takes longer time than working without them, but this is based on a wrong assumption that it takes the same amount of time to implement the code with and without tests. In reality writing tests speeds up coding by making it easier to run this code under different conditions in a friendly environment. There doesn’t exist a single reason to not write tests .
+I don’t remember who said it, but code without tests is legacy by design. There are tons of pros to writing tests: 1) easier to hire high-quality developers, 2) no recurring bugs, 3) accurate estimation of time requirements for tasks, 4) saving time and money on manual testing, 5) higher developer morale, 6) being able to perform architecture adjustments which would be unfeasible without tests, 7) new developers learn project faster, 8) bigger trust between developers, 9) less stress for developers when sotware malfunctions. Avoiding using tests in modern development is the same as avoiding using cars in logistics, instead relying on ye olde horses. There exists a popular misconception that writing and maintaining tests takes longer time than working without them, but this is based on a wrong assumption that it takes the same amount of time to implement the code with and without tests. In reality writing tests speeds up coding by making it easier to run this code under different conditions in a friendly environment. There doesn’t exist a single reason to not write test.
 
 ### Use linters
 
@@ -37,12 +37,16 @@ In my experience, coverage metrics are make-believe, having a 100% code coverage
 
 It is generally good if your code is unified and homogenous, but this doesn’t have to always be required. Some parts of system are used more often than others, and it’s OK to have less important parts to be less polished than the core parts. It’s also generally optional and not required to refactor X part of the system, which is similar to the Y part you are refactoring now, but in this case you have to let your teammates know about your refactoring, so that they would be able to do the same thing when they will work with X part.
 
+### In SOLID letters S and D are not mandatory
+
+We do not code to follow rules, we use rules to aid us in coding. Sometimes disobeying rules may be more advantageous than following them. In my career I have experienced many times that enforcing S and D in SOLID may be an overkill. If your class can do more than one thing, it doesn’t necessarily mean that it is low-quality, sometimes it is fine. It is even more fine with D: it’s totally OK to be dependent on the MySQL client class instead of Database client class. We don’t need to create abstractions simply for the sake of creating abstractions, it’s permissible to do some hardcoding if it helps us to avoid increasing structural complexity of the system. Very few and only experienced developers can create good abstractions without having simultaneously at least TWO things which they are hiding under said abstraction. 
+
 
 ## Python
 
 ### Avoid using comments in your code
 
-I recommend avoiding comments in your code. I believe deeply that your code should be so simple, that the comments would become unnecessary. The problem is that no one trust comments. Whenever developer sees a comment, the first thing they always think about is whether this comment is outdated or not, because no one ever keeps them up to date, it’s the nature of things. I believe comments are acceptable when 1) you are explaining a calculated number, 2) you are explaining why you added noqa here, 3) your code is so complicated that you have to write the comment as final solution to make it at least somehow easier, 4) if your code generates some attributes and you want to make it easier to search project for them. Don’t forget that if you are writing a comment, never write it in a way that describes your code. The comment should always describe data or situation. Code is obvious, it’s not hard to understand that there is a for loop or something, it’s hard to understand why is it there and what’s inside of it.
+I recommend avoiding comments in your code. I believe deeply that your code should be so simple, that the comments would become unnecessary. The problem is that no one trust comments. Whenever developer sees a comment, the first thing they always think about is whether this comment is outdated or not, because no one ever keeps them up to date, it’s the nature of things. I believe comments are acceptable when 1) you are explaining a calculated number, 2) you are explaining why you added a NOQA here, 3) your code is so complicated that you have to write the comment as final solution to make it at least somehow easier, 4) if your code generates some attributes and you want to make it easier to search project for them. Don’t forget that if you are writing a comment, never write it in a way that describes your code. The comment should always describe data or situation. Code is obvious, it’s not hard to understand that there is a for loop or something, it’s hard to understand why is it there and what’s inside of it.
 
 ```Python
 ❌ 
@@ -98,10 +102,11 @@ for name, condition in NAME_CONDITIONS.items():
     if condition(value):
         break
 
-print(output)
+print(value)
 
 ```
 This refactoring may or may not be reasonable, but what matters is that in this piece of code 1) we see that our `if` statement is actually not a code, but data, 2) we would not have to write tons of `elif` statements if we will have tons of conditions, 3) we separate output from the action, which makes it easier to test. Generally speaking, every piece of your code ideally should always be either data or action, also there are different types of actions, such as calculation and output. This is related to abstraction layers and you have to master it.
+
 
 ### Structure your code as layered iterations
 
@@ -173,6 +178,15 @@ class WordCatFinder:
             return -1
 
 ```
+
+### Keep your classes and methods brief
+
+Try to keep your methods shorter than 20 lines of code. Having 20 to 40 is permissible in complex calculations, but having more than 50 is a bad practice which you should always avoid. There is nothing easier than splitting methods into submethods even without any logic refactoring, and you should always do it, because otherwise you will make it harder to read and harder to test, which ultimately makes this code prone to errors.
+
+### Watch out for cyclomatic complexity
+
+Your functions should have as few controlling statements (`if`, `for`, `while`) as possible. You should care about the cyclomatic complexity of your code, because the more execution branches the algorithm has, the more error-prone it becomes. It also becomes harder to read and harder to test, people tend to get lost in conditional switches and they may forget some scenarios.
+
 
 ### Use variable prefixes and postfixes
 
