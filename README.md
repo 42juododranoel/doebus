@@ -181,7 +181,7 @@ class WordCatFinder:
 
 ### Keep your classes and methods brief
 
-Try to keep your methods shorter than 20 lines of code. Having 20 to 40 is permissible in complex calculations, but having more than 50 is a bad practice which you should always avoid. There is nothing easier than splitting methods into submethods even without any logic refactoring, and you should always do it, because otherwise you will make it harder to read and harder to test, which ultimately makes this code prone to errors.
+Try to keep your methods shorter than 20 lines of code. Having 20 to 40 is permissible in complex calculations, but having more than 40 is a bad practice which you should always avoid. There is nothing easier than splitting methods into submethods even without any logic refactoring, and you should always do it, because otherwise you will make it harder to read and harder to test, which ultimately makes this code prone to errors.
 
 ### Watch out for cyclomatic complexity
 
