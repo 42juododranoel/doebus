@@ -259,7 +259,7 @@ Magic numbers are numbers which have unclear meaning. Consider example below. Se
 
 ### Avoid Noun Adjunct violations
 
-[Noun adjunct:](https://en.wikipedia.org/wiki/Noun_adjunct) means that if we use noun before another noun, it usually has to be singular. For example if we have `cats` list and `names` list, and then we combine them, the result should be called `cat_names`, not `cats_names`. It’s the same thing as backend developers instead of backends delelopers. There are exceptions like sports companies, but in most cases the first noun should be singular.
+[Noun adjunct](https://en.wikipedia.org/wiki/Noun_adjunct) means that if we use noun before another noun, it usually has to be singular. For example if we have `cats` list and `names` list, and then we combine them, the result should be called `cat_names`, not `cats_names`. It’s the same thing as backend developers instead of backends delelopers. There are exceptions like sports companies, but in most cases the first noun should be singular.
 
 ```
 ❌ views_count
@@ -270,6 +270,67 @@ Magic numbers are numbers which have unclear meaning. Consider example below. Se
 ❌ users_posts
 ⭕️ user_posts
 ```
+
+
+### Learn standard library
+
+Each Python developer should be aware of Python standard library utilities. Below is a list of most important once in my experience:
+
+Each developer should learn the following standard library packages: 
+
+* `string` — common character lists, such as `ABCDEFGHIJKLMNOPQRSTUVWXYZ` and others
+
+* `re` — regular expressions (`sub`, `findall`, etc)
+
+* `datetime` — dates and times (`timedelta`, `date`, `time`, etc)
+
+* `collections` — container data types (`namedtuple`, `deque`, `Counter`, `defaultdict`)
+
+* `array` — python array implementation
+
+* `copy` — copying objects
+
+* `pprint` — printing objects with clean tabs and in a pretty fashion
+
+* `enum` — enumerations
+
+* `math` — some calculations like `sqrt`, `ceil`, `log`, etc
+
+* `decimal` — better floats
+
+* `fractions` — clear fraction representation
+
+* `random` — random-related functions, like `choice`, `randint`, `randrange`, etc
+
+* `statistics` — some statistic calculations like `mean`, `median`, etc
+
+* `sqlite3` — lightweight SQL database
+
+* `csv` — managing CSV files
+
+* `hashlib` — hash function implementations for SHA, MD5 and so on
+
+* `os` — files, directory traversing and other OS-related things
+
+* `io` — working with data streams
+
+* `time` — time-related things, such as `sleep`, `strftime`, etc
+
+* `argparse` — CLI building tools (note that there are better third-party tools)
+
+* `logging` — logging mechanisms (note that there are better third-party tools)
+
+* `platform` — machine-specific underlying environment
+
+* `threading` — multithreading tools for IO-bound tasks
+
+* `multiprocessing` — multiprocessing tools for CPU-bound tasks
+
+* `subprocess` — managing subprocesses
+
+* `queue` — queue classes
+
+* `asyncio` — concurrent code tools
 
 
 
