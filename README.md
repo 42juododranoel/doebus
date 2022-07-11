@@ -274,7 +274,7 @@ Magic numbers are numbers which have unclear meaning. Consider example below. Se
 
 ### Learn standard library
 
-Each Python developer should be aware of Python standard library utilities. Below is a list of most important once in my experience:
+Each Python developer should be aware of Python standard library utilities. Below is a list of the most important ones in my experience:
 
 * `string` — common character lists, such as `ABCDEFGHIJKLMNOPQRSTUVWXYZ` and others
 
@@ -314,9 +314,9 @@ Each Python developer should be aware of Python standard library utilities. Belo
 
 * `time` — time-related things, such as `sleep`, `strftime`, etc
 
-* `argparse` — CLI building tools (note that there are better third-party tools)
+* `argparse` — CLI building tools
 
-* `logging` — logging mechanisms (note that there are better third-party tools)
+* `logging` — logging mechanisms
 
 * `platform` — machine-specific underlying environment
 
@@ -329,6 +329,52 @@ Each Python developer should be aware of Python standard library utilities. Belo
 * `queue` — queue classes
 
 * `asyncio` — concurrent code tools
+
+* `json` — managing JSON files (`load`, `dump`, `loads`, `dumps`)
+
+* `mimetypes` — work with MIME types (`guess_type`)
+
+* `base64` — BASE enconding
+
+* `uuid` — generate UUIDs
+
+* `gettext` — internationalization tools
+
+* `locale` — internationalization tools once again
+
+* `typing` — type hints
+
+* `pdb` — python debugger (`import pdb; pdb.set_trace()`)
+
+* `venv` — managing virtual environments
+
+* `timeit` — a tool to measure code performance
+
+* `cProfile` — a tool which helps to understand which functions take how much time to rub
+
+* `sys` — some OS functions and tools (`exit`, `argv`, `path`)
+
+* `builtins` — access to some underlying python language objects
+
+* `dataclasses` — dataclasses, literally
+
+* `contextlib` — a tool for building context managers
+
+* `abc` — fancy base classes
+
+* `importlib` — manual python imports
+
+
+### Learn popular third-party tools
+
+I believe the following tools are pretty useful in most projects:
+
+* `requests` helps managing network requests
+
+* `pytest` is a number one testing framework
+
+* `click` helps to build beautiful CLIs
+
 
 
 
