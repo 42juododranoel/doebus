@@ -426,11 +426,56 @@ When you write a test’s name, it’s usually the best if you follow this templ
 
 ```
 
-```
+```Python
 ❌ test_first_name_and_last_name
 ⭕️ test_first_name, test_last_name
 ⭕️ test_name_fields
 ```
+
+### Follow a fixture naming template
+
+Not always, but in most cases it is a good thing if your fixture name starts with object type and is followed by some properties or conditions. Naming fixtures in a predictable way helps to make them as readable as possible for other developers. There are exceptions to this, you may omit type in the name if it is generally obvious or will bring more confusion than clarity. In some situations you may create your own conventions, such as taking the first letter of user’s name or specifying the total amount of objects created by fixture and so on.
+
+```Python
+❌ post
+❌ unpublished_unapproved_tomorrow_post
+⭕️ post_unpublished_unapproved_tomorrow
+```
+
+```Python
+❌ alice
+⭕️ user_alice
+```
+
+```Python
+❌ alice_and_bob
+❌ user_alice_and_user_bob
+⭕️ users_alice_bob
+⭕️ users_ab
+⭕️ users_2
+```
+
+```Python
+⭕️ user_admin
+⭕️ admin
+```
+
+### Use fixture name aliases
+
+If your fixture names are long and hard to read, you may use a following trick to simplify it. It is also fine to have different names for the same fixture in different apps, for example if one app is aware of more details than the other.
+
+```Python
+⭕️ 
+@pytest.fixture
+def post_unpublished_unapproved_tomorrow(create_post):
+    return create_post(is_published=False, is_approved=False, published_at='tomorrow')
+
+
+@pytest.fixture
+def post_bad(post_unpublished_unapproved_tomorrow):
+    return post_unpublished_unapproved_tomorrow
+```
+
 
 ### Treat your tests like you treat your code
 
@@ -476,7 +521,7 @@ def user_bob():
 
 
 @pytest.fixture
-def users():
+def users_2():
     user_alice = User(username='alice')
     user_bob = User(username='bob')
     return [user_alice, user_bob]
@@ -506,7 +551,7 @@ def user_bob(create_user):
 
 
 @pytest.fixture
-def users(user_alice, user_bob):
+def users_2(user_alice, user_bob):
     return [user_alice, user_bob]
 
 ```
@@ -627,6 +672,17 @@ class PostPublisher(BaseService):
         return self.post
 
 ```
+
+
+### Avoid generated migration names
+
+Your migrations should be named manually. Sometimes you have to do some investigating in your migrations, and it is easier to do so if they are named. Also, if you don’t have a name generation each time you run `makemigrations`, you are thus forced to look into each of generated migrations per app and validate its contents, which is a good thing. In [doebus-django](https://github.com/vsevolod-skripnik/django-doebus) this issue is addressed by overriding standard `makemigrations` command.
+
+
+### Avoid having large settings file, avoid having multiple settings files too 
+
+One of the oldest anti-patterns in Django community is using dev and prod settings. I consider it a harmful practice, because having multiple settings files forces you to either violate DRY, or keep in mind the mechanism of inheritance, which sometimes gets messy. The issue becomes even worse if your CI is not straightforward too, there arises a risk of losing track of what is defined where. The best solution out there is to use a single settings file, but separated into different section-files. Dev and prod differences should be addressed by tweaking variables with switches and environment conditions. This is present in [doebus-django.](https://github.com/vsevolod-skripnik/doebus-django)
+
 
 ### Avoid filtering querysets outside of home app
 
