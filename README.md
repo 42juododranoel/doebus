@@ -276,8 +276,6 @@ Magic numbers are numbers which have unclear meaning. Consider example below. Se
 
 Each Python developer should be aware of Python standard library utilities. Below is a list of most important once in my experience:
 
-Each developer should learn the following standard library packages: 
-
 * `string` — common character lists, such as `ABCDEFGHIJKLMNOPQRSTUVWXYZ` and others
 
 * `re` — regular expressions (`sub`, `findall`, etc)
