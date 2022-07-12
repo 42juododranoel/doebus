@@ -362,7 +362,7 @@ Each Python developer should be aware of Python standard library utilities. Belo
 
 * `timeit` — a tool to measure code performance
 
-* `cProfile` — a tool which helps to understand which functions take how much time to rub
+* `cProfile` — a tool which helps to understand which functions take how much time to run
 
 * `sys` — some OS functions and tools (`exit`, `argv`, `path`)
 
