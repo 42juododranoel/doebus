@@ -17,21 +17,26 @@ This is a list of my personal, really opinionated rules, which I believe to be b
 
 It is crucial for developers to feel some degree of ownership and responsibility for their repository. Backend team should have their backend repository only for themselves, same with frontend and infrastructure teams. It is discouraged to mix infrastructure, scripts and backend together in one repository, it is even more discouraged to also add frontend to the mix. Developers should feel at home in their repository, because otherwise the dormitory effect kicks in: if this repository belongs to everybody, then it belongs to nobody, and nobody is responsible for housekeeping in it. People generally like to care about quality and keep things clean and tidy, but they only do that if they feel connection to the place.
 
+
 ### Follow Test Driven Development
 
 I don’t remember who said it, but code without tests is legacy by design. There are tons of pros to writing tests: 1) easier to hire high-quality developers, 2) no recurring bugs, 3) accurate estimation of time requirements for tasks, 4) saving time and money on manual testing, 5) higher developer morale, 6) being able to perform architecture adjustments which would be unfeasible without tests, 7) new developers learn project faster, 8) bigger trust between developers, 9) less stress for developers when sotware malfunctions. Avoiding using tests in modern development is the same as avoiding using cars in logistics, instead relying on ye olde horses. There exists a popular misconception that writing and maintaining tests takes longer time than working without them, but this is based on a wrong assumption that it takes the same amount of time to implement the code with and without tests. In reality writing tests speeds up coding by making it easier to run this code under different conditions in a friendly environment. There doesn’t exist a single reason to avoid writing tests.
+
 
 ### Use linters
 
 Linters are automated tools which highlight potential problems in your code. The more linters — the better. Linters should be run on each build before tests. It is recommended to configure your IDE to undo its custom linting and follow the project linting rules. A PR can’t be merged if it has any linting errors.
 
+
 ### Task code review practice
 
 Each PR should be reviewed by one teammate of same or higher seniority level. This rule is not required for seniors and tech lead, but is mandatory for middle, junior and intern developers. There are multiple benefits of code review: 1) having one more pair of eyes looking at the solution helps to bring quality to it, 2) developers learn from each other, which makes them more productive and create more value for the project in the long run, 3) it helps to avoid bugs and errors since all humans sometimes make mistakes.
 
+
 ### Task product review practice
 
 Each task should be validated by someone from product team, who either created the task, or is responsible for the task’s domain. Each frontend task should also be reviewed by a designer. The goal of product review is to make sure that developer’s solution is considered good and solving original problem or bringing necessary value to the product. The goal of design review is to make sure that UI and UX are solid and high-quality.
+
 
 ### You don’t need coverage metrics
 
@@ -53,7 +58,7 @@ We do not code to follow rules, we use rules to aid us in coding. Sometimes diso
 
 ### Avoid using comments in your code
 
-I recommend avoiding comments in your code. I believe deeply that your code should be so simple, that the comments would become unnecessary. The problem is that no one trust comments. Whenever developer sees a comment, the first thing they always think about is whether this comment is outdated or not, because no one ever keeps them up to date, it’s the nature of things. I believe comments are acceptable when 1) you are explaining a calculated number, 2) you are explaining why you added a NOQA here, 3) your code is so complicated that you have to write the comment as final solution to make it at least somehow easier, 4) if your code generates some attributes and you want to make it easier to search project for them. Don’t forget that if you are writing a comment, never write it in a way that describes your code. The comment should always describe data or situation. Code is obvious, it’s not hard to understand that there is a for loop or something, it’s hard to understand why is it there and what’s inside of it.
+I recommend avoiding comments in your code. I believe deeply that your code should be so simple, that the comments would become unnecessary. The problem is that no one trust comments. Whenever developer sees a comment, the first thing they always think about is whether this comment is outdated or not, because no one ever keeps them up to date, it’s the nature of things. I believe comments are acceptable when 1) you are explaining a calculated number, 2) you are explaining why you added a NOQA here, 3) your code is so complicated that you have to write the comment as final solution to make it at least somehow easier, 4) if your code generates some attributes and you want to make it easier to search project for them. Don’t forget that if you are writing a comment, never write it in a way that describes your code. The comment should always describe data or situation. Code is obvious, it’s not hard to understand that there is a for loop or something, it’s hard to understand why is it there and what’s inside of it. This issue is addressed in [doebus-django](https://github.com/vsevolod-skripnik/doebus-django) by using `flake8-fixme` and `flake8-fixme`.
 
 ```Python
 ❌ 
@@ -155,7 +160,7 @@ class WordCatFinder:
     def __init__(self):
         self.articles = [
             {'id': 1, 'text': 'The cat is eating.'},
-            {'id': 2, 'text': 'Looks like the dog is sleeping.'},
+            {'id': 2, 'text': 'Looks like the cat is sleeping.'},
             {'id': 3, 'text': 'Dead is the cat.'},
         ]
 
@@ -193,7 +198,7 @@ Try to keep your methods shorter than 20 lines of code. Having 20 to 40 is permi
 
 ### Watch out for cyclomatic complexity
 
-Your functions should have as few controlling statements (`if`, `for`, `while`) as possible. You should care about the cyclomatic complexity of your code, because the more execution branches the algorithm has, the more error-prone it becomes. It also becomes harder to read and harder to test, people tend to get lost in conditional switches and they may forget some scenarios.
+Your functions should have as few controlling statements (`if`, `for`, `while`) as possible. You should care about the cyclomatic complexity of your code, because the more execution branches the algorithm has, the more error-prone it becomes. It also becomes harder to read and harder to test, people tend to get lost in conditional switches and they may forget some scenarios. In [doebus-django](https://github.com/vsevolod-skripnik/doebus-django) this is addressed by using `flake8-cognitive-complexity`.
 
 
 ### Use variable prefixes and postfixes
@@ -242,7 +247,7 @@ Avoid calling your variables `got`, `result`, `x`, `i`, `j` and so on. There are
 ```
 
 
-### Multiple lines separated by backslash is a good thing
+### Multiple lines separated by backslashes is a good thing
 
 Make as little calls per line as possible, because it will reduce the cognitive complexity of your code and make it easier to read. People generally read from left to right, they lose focus from left to right. Try to keep the most important parts on left side, also utilize line breaks to avoid long lines.
 ```
@@ -735,7 +740,7 @@ def test_post_strip_text(text, stripped_text):
 
 ### Use time-mocking packages
 
-A common scenario: you created an object and you have to test if the `created_at` is correct, but whenever you run this test, the `timezone.now()` gets a different value. What shall you do? Avoid it? Mock it? As with pretty much anything in development, people have already addressed it. In this case the answer is to use time-mocking packages, such are `freezegun` and `time_machine`. There may be more, but the idea is same: they allow you to manipulate the system time in tests, switch it using `with` statements or travel timedeltas to emulate time passing.  
+A common scenario: you created an object and you have to test if the `created_at` is correct, but whenever you run this test, the `timezone.now()` gets a different value. What shall you do? Avoid it? Mock it? As with pretty much anything in development, people have already addressed it. In this case the answer is to use time-mocking packages, such are `freezegun` and `time_machine`. There may be more, but the idea is same: they allow you to manipulate the system time in tests, switch it using `with` statements or travel timedeltas to emulate time passing. In [doebus-django](https://github.com/vsevolod-skripnik/doebus-django) this is achieved by using `freezegun`.
 
 ```Python
 ⭕️ 
@@ -756,9 +761,9 @@ Pytest has a configuration file called `pytest.ini` which you can use to filter 
 
 ## Django
 
-### You business domain logic should be in services
+### Your business domain logic should be in services
 
-Historically people used models to store business domain logic, but in my experience it’s better to store it in services, because they are easier to test and maintain. Service is a small class which inherits from BaseService and does some piece of business logic. Typical services include `PostCreator`, `UserImporter`, `MembershipUpdater` and so on. The most important part of service is `act` method, it should be overriden and store service code inside of it. If validation is needed, override `validate` method. Remember that in 95% of cases the service needs to return some kind of object or objects, usually the ones which were processed by it. More services is better, smaller services are better.
+Historically people used models to store business domain logic, but in my experience it’s better to store it in services, because they are easier to test and maintain. Service is a small class which inherits from BaseService and does some piece of business logic. Typical services include `PostCreator`, `UserImporter`, `MembershipUpdater` and so on. The most important part of service is `act` method, it should be overriden and store service code inside of it. If validation is needed, override `validate` method. Remember that in 95% of cases the service needs to return some kind of object or objects, usually the ones which were processed by it. More services is better, smaller services are better. This is addressed via `BaseService` in [doebus-django.](https://github.com/vsevolod-skripnik/doebus-django)
 
 ```Python
 ❌
@@ -834,4 +839,6 @@ sitemap_posts = Post.objects.public().filter(published_at__gt=week_ago)
 
 ```
 
+### Use starter templates
 
+It is generally beneficial to use app and project templates, because it 1) speeds up development, 2) helps new developers to better understand what is a bare-minimum, 3) keep apps and projects in a more unified structure. For apps use `--template` option of `startapp` command, for projects use `cookiecutter`. This is addressed by overriding `startapp` command in [doebus-django.](https://github.com/vsevolod-skripnik/doebus-django)
