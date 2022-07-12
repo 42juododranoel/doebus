@@ -1,10 +1,17 @@
 # Vsevolod Skripnik’s Developer Experience Guidelines
 
-This is a list of my personal, really opinionated rules, which I believe to be beneficial and important. Each and every one of them I experienced myself many times and I am 100% sure that they bring lots value if utilized correctly. This list is not final, it gets extended as I get new experiences. Many things here are the results of my work in fands.dev with @f213.
+This is a list of my personal, really opinionated rules, which I believe to be beneficial and important. Each and every one of them I experienced myself many times and I am 100% sure that they bring lots value if utilized correctly. This list is not final, it gets extended as I get new experiences. Many things here are the results of my work in fands.dev with [@f213.](https://github.com/f213)
+
+| Table of Contents |
+| ----------------- |
+| [Developer Experience](#developer-experience) |
+| [Architecture](#architecture) |
+| [Python](#python) |
+| [Pytest](#pytest) |
+| [Django](#django) |
 
 
 ## Developer Experience
-
 
 ### Ownership, responsibility and home feeling
 
@@ -183,13 +190,13 @@ class WordCatFinder:
 
 Try to keep your methods shorter than 20 lines of code. Having 20 to 40 is permissible in complex calculations, but having more than 40 is a bad practice which you should always avoid. There is nothing easier than splitting methods into submethods even without any logic refactoring, and you should always do it, because otherwise you will make it harder to read and harder to test, which ultimately makes this code prone to errors.
 
+
 ### Watch out for cyclomatic complexity
 
 Your functions should have as few controlling statements (`if`, `for`, `while`) as possible. You should care about the cyclomatic complexity of your code, because the more execution branches the algorithm has, the more error-prone it becomes. It also becomes harder to read and harder to test, people tend to get lost in conditional switches and they may forget some scenarios.
 
 
 ### Use variable prefixes and postfixes
-
 
 If a variable has a datetime type, it should end in `_at`. If a variable has a boolean type, it should start with `is_`, `are_`, `was_`, `has_` and so on. The reason is: if we call our variable `deleted`, it will be impossible to understand whether it is a date of deletion or a flag that it was deleted. If a variable is used to store the fact that we have to do some action, such as `Announcement(notify_subscribers=True)`, then it should have a `do_` prefix and be called something like `do_notify_subscribers`. In 9 out of 10 cases there simultaneously exist both method `notify_subscribers` and the variable which indicates that we have to do it. It’s easy to mix it up.
 
@@ -217,7 +224,7 @@ If you have some users which you need to delete, you don’t call them `users_fo
 
 ### Avoid low-quality variable names
 
-Avoid calling your variables `got`, `result`, `x`, `i`, `j` and so on. There are two reasons for that. First: it’s simply unclear what’s inside such variable. Second: it tempts to not understand your own code. When developer writes code, it’s their duty to know exactly what’s inside each variable. It always starts with little things. Today you call your variable `foobar`, in a week you will have bugs on production environment, I have seen it many times. Also I recommend to avoid including types in variable names, because they often change, but people don’t always change the name, so the name stays and brings confusion. One more rule to follow: if your class is `PostCreator`, you should call the instance `post_creator`, don’t call it simply `creator` or anything else, try make your code as predictable as possible.
+Avoid calling your variables `got`, `result`, `x`, `i`, `j` and so on. There are two reasons for that. First: it’s simply unclear what’s inside such variable. Second: it tempts to not understand your own code. When developer writes code, it’s their duty to know exactly what’s inside each variable. It always starts with little things. Today you call your variable `foobar`, in a week you will have bugs on production environment, I have seen it many times. Also I recommend to avoid including types in variable names, because they often change, but people don’t always change the name, so the name stays and brings confusion. One more rule to follow: if your class is `PostCreator`, you should call the instance `post_creator`, don’t call it simply `creator` or anything else, try make your code as predictable as possible. Also avoid shortening variable names for no reason (prefer `receive` over `recv`, `option` over `opt`, etc).
 
 ```
 ❌ got = membership_creator()
