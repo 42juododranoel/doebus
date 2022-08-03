@@ -203,7 +203,7 @@ Your functions should have as few controlling statements (`if`, `for`, `while`) 
 
 ### Use variable prefixes and postfixes
 
-If a variable has a datetime type, it should end in `_at`. If a variable has a boolean type, it should start with `is_`, `are_`, `was_`, `has_` and so on. The reason is: if we call our variable `deleted`, it will be impossible to understand whether it is a date of deletion or a flag that it was deleted. If a variable is used to store the fact that we have to do some action, such as `Announcement(notify_subscribers=True)`, then it should have a `do_` prefix and be called something like `do_notify_subscribers`. In 9 out of 10 cases there simultaneously exist both method `notify_subscribers` and the variable which indicates that we have to do it. It’s easy to mix it up.
+If a variable has a datetime type, it should end in `_at` or `_until`. If a variable has a boolean type, it should start with `is_`, `are_`, `was_`, `has_` and so on. The reason is: if we call our variable `deleted`, it will be impossible to understand whether it is a date of deletion or a flag that it was deleted. If a variable is used to store the fact that we have to do some action, such as `Announcement(notify_subscribers=True)`, then it should have a `do_` prefix and be called something like `do_notify_subscribers`. In 9 out of 10 cases there simultaneously exist both method `notify_subscribers` and the variable which indicates that we have to do it. It’s easy to mix it up.
 
 ```
 ❌ updated, updated, update 
