@@ -60,7 +60,7 @@ You don’t necessarily need local, dev, stage and prod environments. Having loc
 
 ### Distributed monolith is not so bad
 
-It is not inherently a bad thing to have multiple microservices in distributed monolith fasion. There is not much difference between talking to your databases (which everyone does) and talking to your other microservices without truly-distributed architecture. Your architecture may become more complex, but the advantages are also here. You don’t always need a truly-distributed architecture. It is better to start with building distributed monolith and then rebuilding it to a truly-distributed system than starting with a solid monolith and then rebuilding it the same way. You get half of work done in advance without much expense.
+It is not inherently a bad thing to have multiple microservices in a distributed monolith architecture. There is not much difference between talking to your databases (which everyone does) and talking to your other microservices without truly-distributed architecture. Your architecture may become more complex, but the advantages are also here. You don’t always need a truly-distributed architecture. It is better to start with building distributed monolith and then rebuild it to a truly-distributed system than starting with a solid monolith and then rebuild it the same way. You get half of work done in advance without much expense.
 
 
 ## Architecture
