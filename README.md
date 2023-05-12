@@ -15,7 +15,7 @@ This is a list of my personal, really opinionated rules, which I believe to be b
 
 ### Ownership, responsibility and home feeling
 
-It is crucial for developers to feel some degree of ownership and responsibility for their repository. Backend team should have their backend repository only for themselves, same with frontend and infrastructure teams. It is discouraged to mix infrastructure, scripts and backend together in one repository, it is even more discouraged to also add frontend to the mix. Developers should feel at home in their repository, because otherwise the dormitory effect kicks in: if this repository belongs to everybody, then it belongs to nobody, and nobody is responsible for housekeeping in it. People generally like to care about quality and keep things clean and tidy, but they only do that if they feel connection to the place.
+It is crucial for developers to feel some degree of ownership and responsibility for their repository. Backend team should have their backend repositories only for themselves, same with frontend, infrastructure and other teams. It is discouraged to mix teams together in one repository. Developers should feel at home in their repository, because otherwise the dormitory effect kicks in: if something belongs to everybody, then it belongs to nobody, and nobody is responsible for housekeeping in it. People generally like to care about quality and keep things clean and tidy, but only if they feel connection to the place. It is also a good idea to have a home repository for each developer where they are allowed to make things their way (to some limited degree). It helps to reduce number of arguments and help people see that there are good practices in any styles and architectures.
 
 
 ### Follow Test Driven Development
@@ -25,7 +25,12 @@ I don’t remember who said it, but code without tests is legacy by design. Ther
 
 ### Use linters
 
-Linters are automated tools which highlight potential problems in your code. The more linters — the better. Linters should be run on each build before tests. It is recommended to configure your IDE to undo its custom linting and follow the project linting rules. A PR can’t be merged if it has any linting errors.
+Linters are automated tools which highlight potential problems in your code. The more linters — the better. Linters should be run on each build before tests. It is recommended to configure your IDE to undo its custom linting and follow the project linting rules. A PR can’t be merged if it has any linting errors. It is also a good idea to force unified code formatting using automated tool like Black.
+
+
+### Bulletproof deployments
+
+Your deployments should be predictable and simple. Your developers should always 1) know exactly which version is running on which server, 2) have a simple interface to deploy their code, 3) have easy access to deploy logs in case if something fails. Your deployments should always be automated and ideally should be able to downgrade themselves automatically. 
 
 
 ### Task code review practice
@@ -38,9 +43,24 @@ Each PR should be reviewed by one teammate of same or higher seniority level. Th
 Each task should be validated by someone from product team, who either created the task, or is responsible for the task’s domain. Each frontend task should also be reviewed by a designer. The goal of product review is to make sure that developer’s solution is considered good and solving original problem or bringing necessary value to the product. The goal of design review is to make sure that UI and UX are solid and high-quality.
 
 
+### QA testing is overrated
+
+You generally don’t need QA engineers, your developers can do the QA part themselves. However, this requires a high degree of responsibility. You can only achieve it in small teams with high morale and quality developer experience. If you have QA engineers, they should not be held responsible for mistakes of developers. Whatever the workflow is, it is ultimately developer’s responsibility to make quality product.    
+
+
 ### You don’t need coverage metrics
 
-In my experience, coverage metrics are make-believe, having a 100% code coverage doesn’t equate to having 100% product use cases coverage. Some code can’t or doesn’t even need to be covered at all, having a coverage level requirement often forces developers into thinking less about the quality of their work and more about tricking the coverage system into thinking that the work has high enough quality.
+In my experience, coverage metrics are make-believe, having a 100% code coverage doesn’t equate to having 100% product use cases coverage. Some code can’t or doesn’t even need to be covered at all. Having a coverage level requirement often forces developers into thinking less about the quality of their work and more about tricking the coverage system into thinking that the work has high enough quality.
+
+
+### Multiple developer environments are overrated
+
+You don’t necessarily need local, dev, stage and prod environments. Having local and prod is enough. The more environments you have, the more complexity, the less efficient your work. Having dev server may aid in coding and testing, but the dev should never be treated the same way you treat your production environment. It shouldn’t be something “sentient”, it should be easy to maintain and recreate if something gets broken. If you think that your infrastructure is too complex to be run on local machine, it doesn’t necessarily mean that you have to invest into a staging environment, maybe you have to invest in better mocking or isolating. The best strategy to strive for is to have your local machine and production as similar as possible.
+
+
+### Distributed monolith is not so bad
+
+It is not inherently a bad thing to have multiple microservices in distributed monolith fasion. There is not much difference between talking to your databases (which everyone does) and talking to your other microservices without truly-distributed architecture. Your architecture may become more complex, but the advantages are also here. You don’t always need a truly-distributed architecture. It is better to start with building distributed monolith and then rebuilding it to a truly-distributed system than starting with a solid monolith and then rebuilding it the same way. You get half of work done in advance without much expense.
 
 
 ## Architecture
@@ -49,9 +69,10 @@ In my experience, coverage metrics are make-believe, having a 100% code coverage
 
 It is generally good if your code is unified and homogenous, but this doesn’t have to always be required. Some parts of system are used more often than others, and it’s OK to have less important parts to be less polished than the core parts. It’s also generally optional and not required to refactor X part of the system, which is similar to the Y part you are refactoring now, but in this case you have to let your teammates know about your refactoring, so that they would be able to do the same thing when they will work with X part.
 
+
 ### In SOLID letters S and D are not mandatory
 
-We do not code to follow rules, we use rules to aid us in coding. Sometimes disobeying rules may be more advantageous than following them. In my career I have experienced many times that enforcing S and D in SOLID may be an overkill. If your class can do more than one thing, it doesn’t necessarily mean that it is low-quality, sometimes it is fine. It is even finer with D: it’s totally OK to be dependent on the MySQL client class instead of Database client class. We don’t need to create abstractions simply for the sake of creating abstractions, it’s permissible to do some hardcoding if it helps us to avoid increasing structural complexity of the system. Very few and only experienced developers can create good abstractions without having simultaneously at least TWO things which they are hiding under said abstraction. 
+We do not code to follow rules, we use rules to aid us in coding. Sometimes disobeying rules may be more advantageous than following them. In my career I have experienced many times that enforcing S and D in SOLID was an overkill. If your class can do more than one thing, it doesn’t necessarily mean that it is low-quality, sometimes it is fine. It is even finer with D: it’s totally OK to be dependent on the MySQL client class instead of Database client class. We don’t need to create abstractions simply for the sake of creating abstractions, it’s permissible to do some hardcoding if it helps us to avoid increasing structural complexity of the system. Very few and only experienced developers can create good abstractions without having simultaneously at least TWO things which they are hiding under said abstraction. 
 
 
 ## Python
