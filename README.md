@@ -1,6 +1,6 @@
 # Vsevolod Skripnik’s Developer Experience Guidelines
 
-This is a list of my personal, really opinionated rules, which I believe to be beneficial and important. Each and every one of them I experienced myself many times and I am 100% sure that they bring lots value if utilized correctly. This list is not final, it gets extended as I get new experiences. Many things here are the results of my work in fands.dev with [@f213.](https://github.com/f213)
+This is a list of my personal, really opinionated rules, which I believe to be beneficial and important. Each and every one of them I experienced myself many times and I am 100% sure that they bring lots value if utilized correctly. This list is not final, it gets extended as I get new experiences.
 
 | Table of Contents |
 | ----------------- |
