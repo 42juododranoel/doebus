@@ -58,11 +58,6 @@ In my experience, coverage metrics are make-believe, having a 100% code coverage
 You don’t necessarily need local, dev, stage and prod environments. Having local and prod is enough. The more environments you have, the more complexity, the less efficient your work. Having dev server may aid in coding and testing, but the dev should never be treated the same way you treat your production environment. It shouldn’t be something “sentient”, it should be easy to maintain and recreate if something gets broken. If you think that your infrastructure is too complex to be run on local machine, it doesn’t necessarily mean that you have to invest into a staging environment, maybe you have to invest in better mocking or isolating. The best strategy to strive for is to have your local machine and production as similar as possible.
 
 
-### Distributed monolith is not so bad
-
-It is not inherently a bad thing to have multiple microservices in a distributed monolith architecture. There is not much difference between talking to your databases (which everyone does) and talking to your other microservices without truly-distributed architecture. Your architecture may become more complex, but the advantages are also here. You don’t always need a truly-distributed architecture. It is better to start with building distributed monolith and then rebuild it to a truly-distributed system than starting with a solid monolith and then rebuild it the same way. You get half of work done in advance without much expense.
-
-
 ### Some degree of f* around is OK
 
 Your developers should be allowed to do some f* around (provided that it’s not harmful). It is permissible to break your own rules sometimes, for example to violate code style conventions in some places. If you always do things this way or that way, you may miss some important discoveries. Sometimes the only way to find a solution for a problem is to f* around it with utmost disrespect for any rules.
@@ -78,6 +73,11 @@ It is generally good if your code is unified and homogenous, but this doesn’t 
 ### In SOLID letters S and D are not mandatory
 
 We do not code to follow rules, we use rules to aid us in coding. Sometimes disobeying rules may be more advantageous than following them. In my career I have experienced many times that enforcing S and D in SOLID was an overkill. If your class can do more than one thing, it doesn’t necessarily mean that it is low-quality, sometimes it is fine. It is even finer with D: it’s totally OK to be dependent on the MySQL client class instead of Database client class. We don’t need to create abstractions simply for the sake of creating abstractions, it’s permissible to do some hardcoding if it helps us to avoid increasing structural complexity of the system. Very few and only experienced developers can create good abstractions without having simultaneously at least TWO things which they are hiding under said abstraction. 
+
+
+### Distributed monolith is not so bad
+
+It is not inherently a bad thing to have multiple microservices in a distributed monolith architecture. There is not much difference between talking to your databases (which everyone does) and talking to your other microservices without truly-distributed architecture. Your architecture may become more complex, but the advantages are also here. You don’t always need a truly-distributed architecture. It is better to start with building distributed monolith and then rebuild it to a truly-distributed system than starting with a solid monolith and then rebuild it the same way. You get half of work done in advance without much expense.
 
 
 ## Python
