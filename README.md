@@ -63,6 +63,11 @@ You don’t necessarily need local, dev, stage and prod environments. Having loc
 It is not inherently a bad thing to have multiple microservices in a distributed monolith architecture. There is not much difference between talking to your databases (which everyone does) and talking to your other microservices without truly-distributed architecture. Your architecture may become more complex, but the advantages are also here. You don’t always need a truly-distributed architecture. It is better to start with building distributed monolith and then rebuild it to a truly-distributed system than starting with a solid monolith and then rebuild it the same way. You get half of work done in advance without much expense.
 
 
+### Some degree of f* around is OK
+
+Your developers should be allowed to do some f* around (provided that it’s not harmful). It is permissible to break your own rules sometimes, for example to violate code style conventions in some places. If you always do things this way or that way, you may miss some important discoveries. Sometimes the only way to find a solution for a problem is to f* around it with utmost disrespect for any rules.
+
+
 ## Architecture
 
 ### Homogeneity is not mandatory
@@ -777,7 +782,24 @@ def test_post_published_at():
 
 ### Learn pytest.ini and command-line options
 
-Pytest has a configuration file called `pytest.ini` which you can use to filter warnings, alter test discovery, skip some tests, configure environment variables and tweak some other behavior, such pytest modules. I recommend diving into its documentation to understand what is at least theoretically possible to achieve by simple means. My favorites are for example `-x` and `--lf` command-line options, which respectively mean to exit on first failed test and only run the tests which failed during the previous run. 
+Pytest has a configuration file called `pytest.ini` which you can use to filter warnings, alter test discovery, skip some tests, configure environment variables and tweak some other behavior, such pytest modules. I recommend diving into its documentation to understand what is at least theoretically possible to achieve by simple means. My favorites are for example `-x` and `--lf` command-line options, which respectively mean to exit on first failed test and only run the tests which failed during the previous run.
+
+
+### Testing layers
+
+Your application should have a defined testing structure, which should consist of multiple levels. The following is an example for modern Django:
+
+1. API Layer. Every API endpoint should have some tests and ensure that 1) URL exists, 2) no unauthorized access is possible, 3) a correct business logic container is being called, 4) request and response data formats are valid, 5) request validation works fine.
+
+2. Serializer Layer. Generally, you don’t need to test your serializers outside of API tests. The absence and manual forging of `request` and `context` make serializer tests way too synthetic. Your tests should be used to validate real code instead and of code created for tests. But sometimes it is necessary to test serializers, for example if they have some validation which is reused across multiple API endpoints, or if they have some hard-to-test low-level methods.
+
+3. Viewset Layer. There is no way to properly test a viewset. If you need to test your viewset, try to put your viewset code into different functions and test them instead. Otherwise you should test your viewset in your API layer.
+
+4. RPC Layer. RPC tests are similar to API tests and should check 1) input and output format, 2) method naming, 3) ensure proper business logic containers are called.
+
+5. Business Logic Layer. A “Processor” or “Service” is a class dedicated to an atomic business logic task. You should have many tests for each processor. A lot of unittesting should be happening here, other places should be mostly functional.
+
+6. Model Layer. Sometimes you have to override the `.save()` method or put some logic into your model. Such functionality should be tested on model layer.
 
 
 ## Django
