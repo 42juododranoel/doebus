@@ -5,14 +5,14 @@ This is a list of my opinionated rules and pieces of wisdom that I believe to be
 
 | Table of Contents |
 | ----------------- |
-| [Developer Experience](#developer-experience) |
+| [Developer Experience & Abstract Wisdom](#developer-experience--abstract-wisdom) |
 | [Architecture](#architecture) |
 | [Python](#python) |
 | [Pytest](#pytest) |
 | [Django](#django) |
 
 
-## Developer Experience
+## Developer Experience & Abstract Wisdom
 
 
 ### Per-Team Repositories
@@ -104,9 +104,10 @@ The following paragraph is meant only for people who feel a genuine passion for 
 
 A good anecdote states that the junior doesn’t know how to do a certain thing, the middle knows how to do that thing, and the senior knows how not to do that thing. That’s legit wisdom, but there is more to it. In my book, the definition of a senior developer is being able to provide an abstraction over the development processes for non-technical people. When I am hired as a senior developer, my managers don’t need to know most of the things happening on the technical side: they will not hear from me such words as “isolation levels” and “cyclomatic complexity” — they only need the results — but the price is that the rule is also applied to such things as using linters or not, refactoring my code or not, writing tests or not, rewriting parts of the project or not, and trying new libraries or not. It may sound controversial (especially if you are reading this as a manager), but I believe that proficiency at cooking stone soups is a required skill for a senior developer — and a lead developer as well. I’ve been a manager and a lead developer in the past, and I have seen all sides here and saw no evil. Obviously, you are not hired to feel good and have fun doing tech stuff all the time — you are hired for a very specific purpose, and you obviously must make that purpose your top priority — but at the same time, I believe that as long as you serve that purpose, you are not morally obliged to report to your managers on every step and decision you make.
 
-### Presentation and Reputation
 
-“You are a villain, all right, just not a super one,” Megamind said, to which Titan replied, “Yeah, what’s the difference?” The camera zoomed in to the Megamind walking out of the giant flying head lit with lasers and blasting rock music. “Presentation!” he shouted. I believe this piece of wisdom generally holds for most jobs, but I — as a software developer — above all else, apply it to my kin. I believe that a software developer is a part-time politician (or a supervillain, if you will) and must use every chance they get to continuously build an image and present themselves as a competent professional who is there to kick ass and write code (and is all out of code). Imagine you are working on a coding task and struggling with some technical problems. Do you tell your manager about it during a daily stand-up meeting when they ask about your progress? No, you don’t. You only tell that when the problem is successfully solved. To be clear, I am not telling you to ignore problems — I am telling you to look like a person who solves problems more often than struggles with them. You will be struggling from time to time, as we all do, but your managers don’t necessarily need to see you struggling — what they need to see is that you successfully solve problems. Try not to miss chances to present things that people will most likely enjoy seeing, and try milking these chances as much as possible. People’s impression of you is built by your actions — and my advice is to make that impression impressive — it will serve you well. 
+### Presentation & Reputation
+
+“You are a villain, alright, just not a super one,” Megamind said, to which Titan replied, “Yeah, what’s the difference?” The camera zoomed in to the Megamind walking out of the giant flying head lit with lasers and blasting rock music. “Presentation!” he shouted. I believe this piece of wisdom generally holds for most jobs, but I — as a software developer — above all else, apply it to my kin. I believe that a software developer is a part-time politician (or a supervillain, if you will) and must use every chance they get to continuously build an image and present themselves as a competent professional who is there to kick ass and write code (and is all out of code). Imagine you are working on a coding task and struggling with some technical problems. Do you tell your manager about it during a daily stand-up meeting when they ask about your progress? No, you don’t. You only tell that when the problem is successfully solved. To be clear, I am not telling you to ignore problems — I am telling you to look like a person who solves problems more often than struggles with them. You will be struggling from time to time, as we all do, but your managers don’t necessarily need to see you struggling — what they need to see is that you successfully solve problems. Try not to miss chances to present things that people will most likely enjoy seeing, and try milking these chances as much as possible. People’s impression of you is built by your actions — and my advice is to make that impression impressive — it will serve you well. 
 
 Another related piece of advanced wisdom here is the importance of managing the development team’s reputation in the eyes of all others — but most importantly, in the eyes of the project manager. I repeat: this one is extremely advanced and mostly rests on the shoulders of tech leads and senior developers. Have you heard developers whining about managers not understanding a damn thing about software engineering yet peaking their noses where they shouldn’t and making stupid decisions? That happens — I’ve seen it — but the managers do not do that out of pure evilness. Most of them would actually be happy never to have to do that, but the circumstances force them to, and the biggest circumstances are subpar, often lazy, childlike developers. There is a general mistrust between the managers and the developers, and I believe the developers should be actively working on reducing that mistrust as long as they want to be proficient and ass-kicking. How do you do that? In my experience, the following:
 
@@ -117,6 +118,13 @@ Another related piece of advanced wisdom here is the importance of managing the 
 5. Never use technical lingo when talking to non-technical people. Try to make things as clear as possible to them.
 6. Do not think that your (most likely) higher-than-average intelligence makes you a better-than-average person. Do not assume that people around you are stupid or evil — they are most likely not — but at least do not actively express your feelings about them and keep it neutral if you absolutely can’t do better.
 7. Try to bring either good news or bad news followed by “but I have a plan”. Again, I repeat that I do not suggest hiding problems — I suggest a certain framing of how you speak about them. Remember also that good news is good not only because of what it is but also because of when it is. The same thing may make different impressions depending on how good the timing was.
+
+
+### On Leadership
+
+Should you exert the aura of confidence? Should you predict things before they happen? Should you be the one who is always with the plan? Should you be the most resilient, with the fortitude to carry on whatever happens? Should your mere presence inspire people? Should you be the most knowledgeable one or the one with the most years of experience? The one who always helps others? The genius of delegating, time management, and productivity? The master of communication, negotiating any terms imaginable?
+
+Leadership has many aspects, and you can be many things, but you must remember that the power you hold is not yours — it was given to you — and that’s why you should honor your power giver’s goals above all else. Yet, remember also that you do not answer only to those who gave you the power — you answer to your conscience and your subordinates as well. Would you — hypothetically — be a welcome guest in their houses? When they return home after work, what do they tell their significant others about you? “That fucking bastard pissed me off again,” or “I wish more people were like that”?
 
 
 ## Architecture
