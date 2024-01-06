@@ -1,6 +1,7 @@
 # Vsevolod Skripnik’s Developer Experience Guidelines
 
-This is a list of my personal, really opinionated rules, which I believe to be beneficial and important. Each and every one of them I experienced myself many times and I am 100% sure that they bring lots value if utilized correctly. This list is not final, it gets extended as I get new experiences.
+This is a list of my opinionated rules and pieces of wisdom that I believe to be beneficial and important. I have experienced each of them many times, and I am 100% sure that they bring lots of value if utilized correctly. This list gets extended as I get new experiences. Be aware that this document is mostly written for small to medium-sized product companies — I rarely encounter outsourcing companies that share the values I will describe below. Also, remember that most of that is written with web development in mind.
+
 
 | Table of Contents |
 | ----------------- |
@@ -13,54 +14,88 @@ This is a list of my personal, really opinionated rules, which I believe to be b
 
 ## Developer Experience
 
-### Ownership, responsibility and home feeling
 
-It is crucial for developers to feel some degree of ownership and responsibility for their repository. Backend team should have their backend repositories only for themselves, same with frontend, infrastructure and other teams. It is discouraged to mix teams together in one repository. Developers should feel at home in their repository, because otherwise the dormitory effect kicks in: if something belongs to everybody, then it belongs to nobody, and nobody is responsible for housekeeping in it. People generally like to care about quality and keep things clean and tidy, but only if they feel connection to the place. If you have lots of repositories, it’s also a good idea to have a home repository for each developer where they are allowed to make things their way (to some limited degree). It helps to reduce number of arguments and help people see that valuable ideas can be found in any style or structure.
+### Per-Team Repositories
 
-
-### Follow Test Driven Development
-
-I don’t remember who said it, but code without tests is legacy by design. There are tons of pros to writing tests: 1) easier to hire high-quality developers, 2) no recurring bugs, 3) accurate estimation of time requirements for tasks, 4) saving time and money on manual testing, 5) higher developer morale, 6) being able to perform architecture adjustments which would be unfeasible without tests, 7) new developers learn project faster, 8) bigger trust between developers, 9) less stress for developers when sotware malfunctions. Avoiding using tests in modern development is the same as avoiding using cars in logistics, instead relying on ye olde horses. There exists a popular misconception that writing and maintaining tests takes longer time than working without them, but this is based on a wrong assumption that it takes the same amount of time to implement the code with and without tests. In reality writing tests speeds up coding by making it easier to run this code under different conditions in a friendly environment. There doesn’t exist a single reason to avoid writing tests.
+It is crucial for a team of developers to feel some degree of ownership and responsibility for their repository. The backend team should have their backend repositories only for themselves — the same goes for the frontend, the infrastructure, and other teams. It is discouraged to mix teams together in one repository. I call this “a dormitory effect”: a repository that belongs to everybody belongs to nobody, and nobody is responsible for housekeeping in it. People generally like to care about quality and keep things clean and tidy, but only if they feel connected to the place. Developers should feel at home in their repositories.
 
 
-### Use linters
+### Per-Developer Repositories
 
-Linters are automated tools which highlight potential problems in your code. The more linters — the better. Linters should be run on each build before tests. It is recommended to configure your IDE to undo its custom linting and follow the project linting rules. A PR can’t be merged if it has any linting errors. It is also a good idea to force unified code formatting using automated tool like Black.
-
-
-### Bulletproof deployments
-
-Your deployments should be predictable and simple. Your developers should always 1) know exactly which version is running on which server, 2) have a simple interface to deploy their code, 3) have easy access to deploy logs in case if something fails. Your deployments should always be automated and ideally should be able to downgrade themselves automatically. 
+If there are many repositories in your project, it is then generally a good idea to have a home repository for each developer. Each developer should be allowed to make things their way (to some limited degree) in their home repository. This may look controversial initially, but I’ve seen how this approach helped reduce the number of arguments to near zero and introduce a kind of “antifragility” to the code. In my experience, this approach allows developers to boost knowledge sharing and realize that valuable ideas can be found in any style or structure — even if they initially look weird. Keep in mind that this primarily works with middle+ experience levels. It will do more harm to teams with less experienced developers.
 
 
-### Task code review practice
+### Test Your Code
 
-Each PR should be reviewed by one teammate of same or higher seniority level. This rule is not required for seniors and tech lead, but is mandatory for middle, junior and intern developers. There are multiple benefits of code review: 1) having one more pair of eyes looking at the solution helps to bring quality to it, 2) developers learn from each other, which makes them more productive and create more value for the project in the long run, 3) it helps to avoid bugs and errors since all humans sometimes make mistakes.
+There are tons of pros to writing tests:
 
+- It is easier to hire developers who value developer experience.
+- Less recurring bugs.
+- More accurate estimation of time requirements for tasks.
+- Saving time and money on manual testing.
+- Higher developer morale thanks to lower code complexity (if testing is done correctly).
+- Being able to perform large-scale architecture reworks that would be unfeasible without tests.
+- New developers learn projects faster.
+- More trust between developers.
+- Less stress for developers when software malfunctions.
 
-### Task product review practice
-
-Each task should be validated by someone from product team, who either created the task, or is responsible for the task’s domain. Each frontend task should also be reviewed by a designer. The goal of product review is to make sure that developer’s solution is considered good and solving original problem or bringing necessary value to the product. The goal of design review is to make sure that UI and UX are solid and high-quality.
-
-
-### QA testing is overrated
-
-You generally don’t need QA engineers, your developers can do the QA part themselves. However, this requires a high degree of responsibility. You can only achieve it in small teams with high morale and quality developer experience. If you have QA engineers, they should not be held responsible for mistakes of developers. Whatever the workflow is, it is ultimately developer’s responsibility to make quality product.    
-
-
-### You don’t need coverage metrics
-
-In my experience, coverage metrics are make-believe, having a 100% code coverage doesn’t equate to having 100% product use cases coverage. Some code can’t or doesn’t even need to be covered at all. Having a coverage level requirement often forces developers into thinking less about the quality of their work and more about tricking the coverage system into thinking that the work has high enough quality.
+I don’t remember who said it, but code without tests is legacy by design. There is a popular misconception that writing and maintaining tests takes longer than working without them, but in my experience, this only applies when your developers are not experienced enough with tests and testing culture is being actively overlooked. This situation changes drastically when your developers reach a certain point of proficiency in testing (i.e., knowing how to effectively perform complex mocking deep inside your project’s core or quickly write tens of tests that rarely exceed the size of 5-7 lines of code each). After getting skilled enough, the tests would stop requiring more time and instead will start saving your developers time.
 
 
-### Multiple developer environments are overrated
+### Use Linters
 
-You don’t necessarily need local, dev, stage and prod environments. Having local and prod is enough. The more environments you have, the more complexity, the less efficient your work. Having dev server may aid in coding and testing, but the dev should never be treated the same way you treat your production environment. It shouldn’t be something “sentient”, it should be easy to maintain and recreate if something gets broken. If you think that your infrastructure is too complex to be run on local machine, it doesn’t necessarily mean that you have to invest into a staging environment, maybe you have to invest in better mocking or isolating. The best strategy to strive for is to have your local machine and production as similar as possible.
+Linters are automated tools that highlight potential problems in your code following specific rules. The more rules your linters support — the better. Linters should be run on each build before tests, and the testing should not proceed without a hundred percent linting compliance. If your project is legacy and 100% compliance is unfeasible, try using (or writing) a special plugin for your linters that would count the current linting errors in the codebase and, at the very least, require each commit not to introduce any new linting errors, ideally it should also require each commit to reduce the amount of current errors at least by one. All linting on the project should be unified across all machines and ideally run “live” on each IDE. It is also a good idea to enforce a unified automated code formatting using a tool like Black in Python or Prettier in Node. Aside from linting, you should also strive to use type-checking. It may be tedious, but it is worth the effort and helps to improve your architecture skills when you practice thinking in types for a long enough time).
 
 
-### Some degree of f* around is OK
+### Bulletproof Deployments
 
-Your developers should be allowed to do some f* around (provided that it’s not harmful). It is permissible to break your own rules sometimes, for example to violate code style conventions in some places. If you always do things this way or that way, you may miss some important discoveries. Sometimes the only way to find a solution for a problem is to f* around it with utmost disrespect for any rules.
+If the necessity calls for it, you may have bad architecture, tests, and code style, but you can never afford bad deployments — there is no other thing that kills developer morale as fast as code deployment problems. No other developer experience practice really matters if your code is not easily deployed. Your developers should always:
+
+- know exactly which version is running on which server, 
+- have a simple interface to deploy their code, 
+- have easy access to deploy logs in case something fails.
+
+Strive to make your deployments predictable, simple, bulletproof, and ideally even downgradable, but at the very least, they must be fully automated. 
+
+
+### Code Review Practice
+
+Each PR should be reviewed by one teammate of the same or higher seniority level. This rule is not required for seniors and tech leads but is mandatory for middle, junior, and intern developers. There are multiple benefits of code review: 
+
+1. A second opinion may introduce a better solution to the problem than the original one. 
+2. Developers learn from each other and become more productive in the long run.
+3. It helps to reduce bugs and errors since all humans sometimes make mistakes by accident.
+
+It should also be mandatory to strictly review junior- and intern-level developers as they often lack the experience to solve the problem in an acceptably efficient manner and without breaking something else around. 
+
+
+### Product-Knowers
+
+Whatever we do — if we get paid for it — a person (or a person’s representative) pays us to do that specific thing for them. This person may be called a product owner in a product company or a client’s manager in an outsourcing company, but I call these people the product-knowers. They are distinguished by a clear understanding of what kind of product we are building, why each particular task is important, and what the expected result should be. Ideally, each developer should start each task by making a bullet list of things to add, change, or remove, with all of that described in simple human language, and that list should be reviewed and accepted by the product-knower before the actual programming starts. During the programming part, the developer should have easy access to product-knowers, and ideally, each task should have a dedicated product-knower assigned to it (if there are multiple people in that role on the project). No task should ever be considered finished without getting the approval of its product-knower. 
+
+Each developer should strive to understand as much as possible about the product, making their communication with product-knowers as brief as possible due to equal knowledge on both sides. This is not completely possible — and not desirable either — but it still should be a goal of each developer. This applies to both backend and frontend developers, but the frontend developers should also have the exact same type of communication with designers to make sure that the frontend’s UI and UX are solid and high-quality.
+
+
+### QA Done Right
+
+The ideal role for a QA on the project is to deeply understand the user behaviors and the product itself (being the second only to the product-knower), and at the same time, being able to help developers with simple tech things like JS requests or backend APIs (if we are building web apps) or DBs (if we are doing ETL, etc.) and so on. At the very least, your QA engineers should never be held responsible for developers’ mistakes, as it makes developers lazier and more infantile. Whatever the workflow is, it is ultimately the developer’s responsibility to make a quality product. 
+
+
+### No Coverage Metrics
+
+In my experience, coverage metrics are make-believe, and having 100% code coverage doesn’t equate to having 100% quality code or 100% product use cases working properly. Some code can’t or doesn’t even need to be covered at all. You may have it for convenience, but at all costs, avoid making coverage level a requirement. Otherwise, your developers will be constantly tempted to think less about the quality of their work and more about how to trick the coverage system into thinking that the work has high enough quality.
+
+
+### Less Environments
+
+It is controversial, but you don’t necessarily need local, dev, stage, and prod environments. Having only local and prod is enough and ideal — that‘s what my experience tells me. The more environments you have, the more complexity there is, and your work become less efficient. Having a dev server may aid in some cases (if your frontenders for some reason cannot use production servers as their backend, or if you need a place to run demonstrations, or if your production server has an incredibly complicated infrastructure, etc.) — but your dev server should be easy to maintain and recreate if something gets broken, and at the very least it should never be required for backend development.
+
+You should always strive to make the difference between the local, dev, and prod environments as slim as possible, and every developer (ideally QA as well) should be able to run a dockerized copy of your project on their local machines with both backend and frontend. There is really no excuse now as literally anything can be automated and run with Docker. If you think that your infrastructure is too complex to be run like that — I still suggest trying extensive mocking and isolating before falling back to multiple environments.
+
+
+### Positive F-wording Around
+
+Your developers should be allowed to do some f-wording around (provided that it’s not too harmful). It is permissible to break your own rules sometimes, such as violating code style conventions in some places. The reason for that is that if you always do things this way or that way, you may become fragile and miss some important discoveries. Sometimes, the only way to find a solution for a problem is to f-word around it for long enough with utmost disrespect for any rules.
 
 
 ## Architecture
