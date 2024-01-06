@@ -78,7 +78,7 @@ Each developer should strive to understand as much as possible about the product
 
 ### QA Done Right
 
-The ideal role for a QA on the project is to deeply understand the user behaviors and the product itself (being the second only to the product-knower), and at the same time, being able to help developers with simple tech things like JS requests or backend APIs (if we are building web apps) or DBs (if we are doing ETL, etc.) and so on. At the very least, your QA engineers should never be held responsible for developers’ mistakes, as it makes developers lazier and more infantile. Whatever the workflow is, it is ultimately the developer’s responsibility to make a quality product. 
+The ideal role for a QA on the project is to deeply understand the user behaviors and the product itself (being second only to the product-knower), and at the same time, being able to help developers with simple tech things like JS requests or backend APIs (if we are building web apps) or DBs (if we are doing ETL, etc.) and so on. At the very least, your QA engineers should never be held responsible for developers’ mistakes, as it makes developers lazier and more infantile. Whatever the workflow is, it is ultimately the developer’s responsibility to make a quality product. 
 
 
 ### No Coverage Metrics
