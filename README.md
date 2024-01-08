@@ -5,14 +5,15 @@ This is a list of my opinionated rules and pieces of wisdom that I believe to be
 
 | Table of Contents |
 | ----------------- |
-| [Developer Experience & Abstract Wisdom](#developer-experience--abstract-wisdom) |
+| [Developer Experience](#developer-experience) |
+| [Abstract Wisdom](#abstract-wisdom) |
 | [Architecture](#architecture) |
 | [Python](#python) |
 | [Pytest](#pytest) |
 | [Django](#django) |
 
 
-## Developer Experience & Abstract Wisdom
+## Developer Experience
 
 
 ### Per-Team Repositories
@@ -93,6 +94,8 @@ It is controversial, but you don’t necessarily need local, dev, stage, and pro
 You should always strive to make the difference between the local, dev, and prod environments as slim as possible, and every developer (ideally QA as well) should be able to run a dockerized copy of your project on their local machines with both backend and frontend. There is really no excuse now as literally anything can be automated and run with Docker. If you think that your infrastructure is too complex to be run like that — I still suggest trying extensive mocking and isolating before falling back to multiple environments.
 
 
+## Abstract Wisdom
+
 ### Positive F-wording Around
 
 Your developers should be allowed to do some f-wording around (provided that it’s not too harmful). It is permissible to break your own rules sometimes, such as violating code style conventions in some places. The reason for that is that if you always do things this way or that way, you may become fragile and miss some important discoveries. Sometimes, the only way to find a solution for a problem is to f-word around it for long enough with utmost disrespect for any rules.
@@ -124,7 +127,7 @@ Another related piece of advanced wisdom here is the importance of managing the 
 
 Should you exert the aura of confidence? Should you predict things before they happen? Should you be the one who is always with the plan? Should you be the most resilient, with the fortitude to carry on whatever happens? Should your mere presence inspire people? Should you be the most knowledgeable one or the one with the most years of experience? The one who always helps others? The genius of delegating, time management, and productivity? The master of communication, negotiating any terms imaginable?
 
-Leadership has many aspects, and you can be many things, but you must remember that the power you hold is not yours — it was given to you — and that’s why you should honor your power giver’s goals above all else. Yet, remember also that you do not answer only to those who gave you the power — you answer to your conscience and your subordinates as well. Would you — hypothetically — be a welcome guest in their houses? When they return home after work, what do they tell their significant others about you? “That fucking bastard pissed me off again,” or “I wish more people were like that”?
+Leadership has many aspects, and you can be many things, but you must remember that the power you hold is not yours — it was given to you — and that’s why you should honor your power giver’s goals above all else. Yet, remember also that you do not answer only to those who gave you the power — you answer to your conscience and your subordinates as well. Would you — hypothetically — be a welcome guest in their houses? When they return home after work, what do they tell their significant others about you? “That bastard pissed me off again,” or “I wish more people were like that”?
 
 
 ## Architecture
